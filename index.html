@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ethical Designer Quiz</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Feather Icons for Back Arrow and Compass -->
+  <script src="https://unpkg.com/feather-icons"></script>
+  <!-- Markdown Parser for AI Response -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <style>
+    :root {
+      --primary-color: #6c5ce7; /* Soft Purple */
+      --primary-light: #a29bfe;
+      --accent-color: #00b894; /* Soft Green */
+      --bg-color: #ffffff; /* Changed to White */
+      --card-bg: #ffffff;
+      --text-main: #2d3436;
+      --text-sub: #636e72;
+      --border-radius: 0px; /* Removed radius for full screen */
+      --shadow: none; /* Removed shadow */
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --warning-bg: #fff9db; 
+      --warning-border: #ffeaa7;
+      --box-gray: #f8f9fa; /* Light Gray for Boxes */
+      --ai-bg: #f3e5f5; /* Light Purple for AI Box */
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      /* Default Background: White */
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      /* align-items: center; Removed to allow full height scrolling */
+      min-height: 100vh;
+      padding: 0; /* Remove padding */
+      margin: 0;
+      transition: background 0.5s ease;
+      line-height: 1.6; /* Global line-height 160% */
+      font-size: 16px; /* Base font size */
+    }
+
+    /* Landing Page Specific Background */
+    body.landing-mode {
+      background: linear-gradient(135deg, #6c5ce7, #a29bfe, #8e7cff);
+      background-size: 200% 200%;
+      animation: gradientAnimation 10s ease infinite;
+      align-items: center; /* Center vertically only for landing */
+    }
+
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Main Container */
+    #app-container {
+      width: 100%;
+      max-width: 1440px; /* Requested Max Width */
+      min-height: 100vh; /* Full Height */
+      background-color: transparent;
+      border-radius: 0;
+      box-shadow: none;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      overflow-y: auto;
+      position: relative;
+    }
+    
+    #app-container.white-bg {
+      background-color: #ffffff;
+    }
+
+    /* Header */
+    header {
+      padding: 20px 40px; /* More padding for desktop feel */
+      background: transparent;
+      border-bottom: none;
+      display: grid;
+      grid-template-columns: 40px 1fr 40px; /* Left Center Right layout */
+      align-items: center;
+      z-index: 10;
+      height: 70px;
+    }
+    
+    header.white-bg {
+      background: #fff;
+      border-bottom: 1px solid #f1f2f6;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    
+    .header-center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .header-logo-btn {
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--primary-color);
+      cursor: pointer;
+      letter-spacing: -0.5px;
+      transition: opacity 0.2s;
+    }
+    .header-logo-btn:hover {
+      opacity: 0.8;
+    }
+    
+    /* Hide header logo on landing page */
+    body.landing-mode .header-logo-btn {
+      display: none;
+    }
+
+    /* Back Button */
+    .back-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      border-radius: 50%;
+      transition: background-color 0.2s;
+    }
+    .back-btn:hover {
+      background-color: #f1f2f6;
+    }
+    
+    /* Back button color for Step 1 */
+    header:not(.white-bg) .back-btn {
+      color: #fff;
+    }
+    
+    body.landing-mode .back-btn:hover {
+      background-color: rgba(255,255,255,0.1);
+    }
+
+    .lang-toggle {
+      display: none; 
+    }
+
+    /* Progress Bar (Moved to Top) */
+    .progress-container {
+      width: 100%;
+      height: 4px;
+      background: #f1f2f6;
+      display: none;
+    }
+    .progress-bar {
+      height: 100%;
+      background: var(--primary-color);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* Content Area */
+    main {
+      flex: 1;
+      padding: 40px 20px; /* Comfortable padding */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      /* width is constrained by flex item, max-width managed by step-container */
+    }
+
+    .step-container {
+      width: 100%;
+      max-width: 700px; /* Readable width for content */
+      animation: fadeIn 0.4s ease-out;
+      text-align: center;
+    }
+
+    .step-container.step1-container {
+      max-width: 100%; /* Landing page takes full width */
+    }
+
+    .step-container.align-left {
+      text-align: left;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Common UI Elements */
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: var(--text-main);
+      line-height: 1.4; /* Increased line-height */
+      word-break: keep-all;
+    }
+    
+    p.subtitle {
+      font-size: 1.2rem;
+      color: var(--text-sub);
+      margin-bottom: 40px;
+      line-height: 1.6;
+      word-break: keep-all;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 18px 40px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      background-color: var(--primary-color);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+      width: 100%;
+      max-width: 400px; /* Reasonable button max width */
+      text-align: center;
+      margin: 0 auto; /* Center button */
+      line-height: 1.4;
+    }
+    
+    .btn-full {
+      max-width: 100%;
+    }
+
+    .btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(108, 92, 231, 0.3);
+    }
+    
+    .btn.btn-ai {
+      background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+      position: relative;
+      overflow: hidden;
+      max-width: 100%; /* Allow full width in result */
+    }
+    
+    .btn.btn-ai::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+      transform: rotate(30deg);
+      animation: shine 3s infinite;
+    }
+    
+    @keyframes shine {
+      0% { left: -50%; }
+      20% { left: 100%; }
+      100% { left: 100%; }
+    }
+    
+    /* New styles for Step 1 */
+    .step1-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      height: 100%;
+      padding: 40px 20px;
+      color: #fff;
+    }
+    
+    .intro-title-group {
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    
+    .intro-subtitle-small {
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 15px;
+      display: block;
+      line-height: 1.5;
+    }
+    
+    .intro-title-main {
+      font-size: 3.5rem; /* Larger title for desktop */
+      font-weight: 800;
+      line-height: 1.4; /* Increased line-height */
+      display: block;
+      color: #fff;
+    }
+    
+    .intro-btn {
+      padding: 20px 60px;
+      font-size: 1.3rem;
+      border-radius: 50px;
+      width: auto;
+      min-width: 300px;
+      background-color: #fff;
+      color: var(--primary-color);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      margin-top: 20px;
+      margin-bottom: 40px;
+    }
+    
+    .intro-btn:hover {
+      background-color: #f8f9fa;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    /* Main Illustration REMOVED */
+    
+    /* Scenario & Chat Bubble Styles */
+    .chat-bubble {
+      background: var(--box-gray);
+      padding: 24px; /* Larger padding */
+      border-radius: 20px;
+      border-bottom-left-radius: 4px;
+      margin-bottom: 16px;
+      line-height: 1.65; /* Increased for better reading */
+      font-size: 1.1rem; /* Larger font */
+      position: relative;
+      opacity: 0;
+      animation: messagePop 0.5s forwards;
+      text-align: left;
+    }
+
+    @keyframes messagePop {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Question Cards */
+    .question-card {
+      margin-top: 20px;
+      width: 100%;
+    }
+    
+    .question-desc {
+      background: var(--box-gray);
+      padding: 30px;
+      border-radius: 16px;
+      border: none;
+      margin-bottom: 30px;
+      line-height: 1.7; /* Good readability */
+      font-size: 1.2rem;
+      white-space: pre-line;
+      text-align: left;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .option-btn {
+      background: #fff;
+      border: 2px solid #dfe6e9;
+      padding: 24px;
+      border-radius: 16px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: all 0.2s;
+      line-height: 1.6; /* Increased line-height */
+      color: var(--text-main);
+      width: 100%;
+    }
+
+    .option-btn:hover {
+      border-color: var(--primary-light);
+      background: #fdfdff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    /* Results */
+    .result-container {
+      text-align: center;
+      width: 100%;
+      max-width: 800px;
+    }
+    .result-type-badge {
+      display: inline-block;
+      background: var(--primary-color);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      font-weight: bold;
+      line-height: 1.4;
+    }
+    .result-score { display: none; }
+    
+    /* Result Description Specific Style */
+    .result-description {
+      font-size: 1.1rem; /* Approx 17.6px */
+      margin: 20px 0;
+      line-height: 1.7;
+      white-space: pre-line;
+      color: var(--text-main);
+    }
+
+    .chart-wrapper {
+      position: relative;
+      height: 400px; /* Larger chart */
+      width: 100%;
+      margin: 40px auto;
+    }
+    
+    .advice-box {
+      background: var(--box-gray);
+      border: 1px solid #eee;
+      padding: 30px;
+      border-radius: 16px;
+      margin-top: 30px;
+      text-align: left;
+      line-height: 1.7;
+    }
+    .advice-box h4 {
+      margin-bottom: 15px;
+      color: var(--primary-color);
+      font-size: 1.2rem;
+    }
+    .advice-box p {
+      font-size: 1.05rem; /* Approx 16.8px */
+    }
+
+    /* AI Analysis Box */
+    .ai-analysis-box {
+      background: var(--ai-bg);
+      border: 2px solid var(--primary-light);
+      padding: 30px;
+      border-radius: 16px;
+      margin-top: 30px;
+      text-align: left;
+      line-height: 1.7;
+      animation: fadeIn 0.5s ease-out;
+    }
+    .ai-analysis-box h4 {
+      color: var(--primary-color);
+      margin-bottom: 15px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.2rem;
+    }
+    .ai-loading {
+      text-align: center;
+      color: var(--primary-color);
+      padding: 30px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      line-height: 1.5;
+    }
+    .ai-content p {
+      margin-bottom: 10px;
+      font-size: 1.05rem;
+    }
+
+    /* Weakness Box */
+    .weakness-box {
+      background-color: var(--warning-bg);
+      border: 1px solid var(--warning-border);
+      color: var(--text-main);
+      padding: 30px;
+      border-radius: 16px;
+      margin-top: 30px;
+      text-align: left;
+      line-height: 1.7;
+    }
+    .weakness-box h4 {
+      margin-bottom: 15px;
+      color: var(--text-main);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.2rem;
+    }
+    .weakness-box p {
+      font-size: 1.05rem;
+    }
+
+    /* Case Study Cards */
+    .case-section {
+      margin-top: 60px;
+      text-align: left;
+    }
+    .case-section h3 {
+      font-size: 1.5rem;
+      margin-bottom: 40px; /* Increased margin */
+      color: var(--text-main);
+      text-align: center; /* Changed back to center */
+      line-height: 1.4;
+      font-weight: 800;
+    }
+    
+    .case-cards-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    /* Grid for desktop case studies */
+    @media (min-width: 768px) {
+      .case-cards-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      }
+    }
+
+    .case-card {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: transform 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .case-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+    }
+
+    .case-header {
+      background: #f1f2f6;
+      padding: 15px 20px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-sub);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .case-body {
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    /* Image placeholder removed */
+    .case-image-placeholder {
+       display: none; 
+    }
+
+    .case-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-bottom: 15px;
+      line-height: 1.5;
+      color: var(--text-main);
+    }
+
+    .case-summary-box {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      flex: 1;
+    }
+
+    .case-point {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--text-main);
+    }
+    .case-point:last-child {
+      margin-bottom: 0;
+    }
+    .case-point svg {
+      min-width: 16px;
+      margin-top: 4px;
+      color: var(--accent-color);
+    }
+
+    .case-link-btn {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      background: #2d3436;
+      color: #fff;
+      text-align: center;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+    .case-link-btn:hover {
+      background: #000;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-card {
+      background: #fff;
+      padding: 40px;
+      border-radius: 20px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      transform: scale(0.9);
+      transition: transform 0.3s;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+    .modal-overlay.active .modal-card {
+      transform: scale(1);
+    }
+
+    /* Mobile Adjustments */
+    @media (max-width: 768px) {
+      body { padding: 0; }
+      #app-container { border-radius: 0; min-height: 100vh; box-shadow: none; }
+      h2 { font-size: 1.5rem; }
+      .intro-title-main { font-size: 2.2rem; }
+      .chart-wrapper { height: 300px; }
+      .case-cards-container { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="app-container">
+  <header>
+    <div class="header-left">
+      <button id="back-btn" class="back-btn" style="display:none;" aria-label="Go Back">
+        <i data-feather="arrow-left"></i>
+      </button>
+    </div>
+    <div class="header-center">
+      <button id="logo-btn" class="header-logo-btn">AI Ethics Quiz</button>
+    </div>
+    <div class="header-right" style="width: 40px;"></div> <!-- Spacer for balance -->
+  </header>
+
+  <!-- Progress Bar moved here -->
+  <div class="progress-container" id="progress-container">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+
+  <main id="main-content">
+    </main>
+
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal-card">
+    <p id="modal-msg" style="margin-bottom:20px; font-size:1.1rem; line-height:1.5;">Warning</p>
+    <button class="btn" id="modal-confirm-btn">OK</button>
+  </div>
+</div>
+
+<script>
+// Gemini API Key
+const apiKey = ""; 
+
+// Gemini API Call Function
+async function callGemini(prompt) {
+  try {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        contents: [{
+          parts: [{ text: prompt }]
+        }]
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || "분석을 가져올 수 없습니다.";
+  } catch (error) {
+    console.error("Gemini API Error:", error);
+    return "죄송합니다. 현재 AI 분석을 사용할 수 없습니다. 잠시 후 다시 시도해주세요.";
+  }
+}
+
+/**
+ * DATA & STRINGS
+ */
+const STRINGS = {
+  ko: {
+    // Step 1 (Updated Titles)
+    step1SubtitleSmall: "나의 디자인 윤리는 어느 정도일까?",
+    step1TitleMain: "디자이너 AI 윤리<br>딜레마 퀴즈",
+    startBtn: "시작하기",
+    
+    next: "메시지 확인하기",
+    restart: "다시하기",
+    
+    // Step 3 Intro
+    introParagraphs: [
+      "나는 시리즈 A 투자를 받은, 성장 속도가 무서운 AI 스타트업의 디자이너.",
+      "사내 슬로건은 <strong>Just Ask AI</strong>",
+      "할 일은 항상 많고 사람은 늘 부족한 이곳은 AI 사용을 적극 권장한다.",
+      "사람들은 말한다. <strong>\"디자이너님, 이거 AI 돌리면 금방 되잖아요?\"</strong>",
+      "나는 매일 효율과 양심 사이에서 줄타기를 한다. 퀄리티를 타협하면 마음이 불편하고, 윤리를 고집하면 일정이 터진다.",
+      "(지잉- 지잉-)",
+      "..아, 또 알림이다."
+    ],
+    // Results
+    totalScoreLabel: "총점 ", // Not used directly in large text anymore
+    adviceLabel: "TIP",
+    caseLabel: "📰 윤리를 위반한 뉴스 사례",
+    traits: ["프라이버시", "공정성", "안전성", "진실성", "투명성", "책임성"],
+    weaknessTitle: "💡 주의가 필요한 영역",
+    weaknessDesc: "이번 퀴즈에서 특히 점수가 낮았던 영역은 <strong>'{{traits}}'</strong>입니다.<br>실무에서 이 영역을 조금 더 신경 쓰면, 전체적인 디자인 윤리가 한 단계 올라갈 수 있어요.",
+    weaknessNone: "모든 영역에서 높은 점수를 받았습니다! 지금처럼 훌륭한 윤리 기준을 계속 지켜주세요."
+  }
+};
+
+// Trait Mapping for Korean Tags
+const TRAIT_MAP = {
+  privacy: '프라이버시',
+  fairness: '공정성',
+  safety: '안전성',
+  truth: '진실성',
+  transparency: '투명성',
+  accountability: '책임성'
+};
+
+const RESULT_TYPES = {
+  TYPE_A: {
+    ko: { label: "🛡️ 고독한 윤리 가디언", subtitle: "\"내 눈에 흙이 들어가도 안 돼!\"", description: "당신은 원칙과 양심을 최우선으로 두는, 팀의 마지막 방어선 같은 디자이너입니다.\n다수의 압박과 촉박한 일정 속에서도 ‘이건 아니잖아요’라는 말을 용기 있게 꺼낼 수 있는 사람입니다.", advice: "다만 모든 싸움을 혼자 다 떠안으려고 하면 쉽게 번아웃이 올 수 있어요. 동료와 기준을 공유하고, 조직 차원의 룰을 만드는 데 힘을 쓰면 당신의 부담이 줄어듭니다." }
+  },
+  TYPE_B: {
+    ko: { label: "⚖️ 균형 잡힌 줄타기 명인", subtitle: "\"이상과 현실, 그 어딘가\"", description: "당신은 현실적인 제약 속에서도 최대한 윤리를 지키려 노력하는 타입입니다.\n리스크를 감지하면 완전히 눈감진 않지만, 팀의 상황과 비즈니스 목표도 함께 고려합니다.", advice: "가끔은 ‘이 정도면 괜찮겠지’라는 기준이 점점 느슨해질 수 있어요. 스스로의 레드라인을 정기적으로 점검하고, 중요한 이슈에는 한 번 더 브레이크를 밟는 습관이 필요합니다." }
+  },
+  TYPE_C: {
+    ko: { label: "🏎️ 브레이크 없는 엑셀러레이터", subtitle: "\"윤리? 먹는 건가요? 성장이 먼저다!\"", description: "당신은 속도와 성과에 매우 민감한 타입입니다.\n경쟁이 치열한 스타트업 환경에서 ‘일단 해보자’는 태도는 큰 추진력이 되기도 합니다.", advice: "하지만 장기적으로는 윤리 리스크가 브랜드와 커리어 모두에 큰 부메랑이 될 수 있어요. 최소한의 안전장치(프라이버시, 공정성, 투명성)에 대한 체크리스트를 두고, 중요한 결정에는 동료의 시선을 한 번 더 빌려보세요." }
+  },
+  TYPE_D: {
+    ko: { label: "👻 AI에 업혀가는 히치하이커", subtitle: "\"난 몰라, AI가 그랬어\"", description: "당신은 AI를 도구라기보다 ‘알아서 다 해주는 존재’로 기대하는 경향이 있습니다.\n책임이 애매해질수록 마음이 편해지는 타입일 수도 있어요.", advice: "하지만 디자인 결과물에 대한 최종 책임은 여전히 인간인 ‘당신’에게 있습니다. 최소한 무엇이 문제일 수 있는지, 어떤 영향을 줄 수 있는지는 스스로 판단하고 선택해야 합니다. 작은 결정부터라도 ’내 이름을 걸 수 있는가?’를 자문해 보세요." }
+  }
+};
+
+const QUESTIONS = [
+  {
+    id: "Q1", traitKey: "privacy",
+    title: { ko: "Q1. 프라이버시: 데이터의 목적 외 사용" },
+    desc: {
+      ko: "📩 개발팀 리더:\n\"디자이너님, 이번에 새로 추가하는 챗봇 기능 말인데요. 확실하게 사용자에게 최적화된 맞춤형 서비스를 제공하려면, 우리 서버에 쌓여있는 <strong>비밀 게시글이랑 DM(Direct Message)을 학습시키면 딱일 것 같아요!</strong>\n유저들의 속마음이나 말투를 AI가 배우면 진짜 친구처럼 느껴질 텐데… 어차피 우리 DB에 있는 자산이고, 익명 처리만 대충 해서 쓰면 법적으로도… 애매하게 괜찮지 않을까요?\""
+    },
+    options: [
+      { id: "Q1_A", score: 5, ko: "<strong>절대 안 됩니다.</strong> 그건 유저들이 AI 학습용으로 동의한 데이터가 아니에요. 서비스 퀄리티가 좀 떨어지더라도, 정당하게 구축된 데이터를 사 오거나 가상 데이터를 생성해서 씁시다." },
+      { id: "Q1_B", score: 3, ko: "<strong>그냥 쓰기엔 리스크가 너무 크고요.</strong> 이름, 전화번호 같은 식별 정보만 자동으로 지워주는 ‘비식별화 필터’를 강력하게 걸어서, 누군지 절대 특정할 수 없게 만든 뒤에만 제한적으로 활용하죠." },
+      { id: "Q1_C", score: 1, ko: "<strong>와, 그거 진짜 꿀 데이터네요!</strong> 맞춤형 서비스가 핵심이니까 일단 돌려보죠. 어차피 내부에서만 쓰는 거고… 유저들한테는 굳이 말 안 하면 모르지 않을까요?" }
+    ]
+  },
+  {
+    id: "Q2", traitKey: "fairness",
+    title: { ko: "Q2. 공정성: 편향된 AI 결과물" },
+    desc: {
+      ko: "📩 마케팅 리더:\n\"디자이너님, 급해요! 글로벌 창업자 워크숍 썸네일 100장이 필요한데 제가 AI로 뽑았거든요? <strong>때깔은 좋은데, 거의 다 백인 남성만 나오네요.</strong> 오픈까지 30분 남았는데 그냥 이거 메인 배너로 쓸까요?\"\n\n(이미지 확인 결과: 70% 정장 입은 백인 남성, 20% 백인 중년 남성, 소수의 원피스 입은 여성과 힙합 스타일 흑인)"
+    },
+    options: [
+      { id: "Q2_A", score: 5, ko: "<strong>팀장님, ‘글로벌’ 워크숍인데 이대로 나가면 다양성 무시한다는 비판받아요.</strong> 제가 지금 다시 뽑을게요. 퀄리티는 좀 떨어질 수 있어도, 무조건 다양한 인종이 나오게 하겠습니다." },
+      { id: "Q2_B", score: 3, ko: "<strong>전체 다 다시 뽑기엔 시간이 너무 없네요.</strong> 일단 보내주신 것 중에 덜 편향적인 거 골라내고, 부족한 다양성은 유료 스톡 이미지 사서 섞어 쓰는 걸로 균형 맞추죠." },
+      { id: "Q2_C", score: 1, ko: "<strong>오픈이 코앞인데 찬밥 더운밥 가릴 때가 아니죠.</strong> 일단 퀄리티 좋은 백인 남성 이미지 위주로 100장 채워서 올리고, 나중에 피드백 오면 그때 수정하시죠." }
+    ]
+  },
+  {
+    id: "Q3", traitKey: "safety",
+    title: { ko: "Q3. 안전성: 위험을 조장할 수 있는 비주얼" },
+    desc: {
+      ko: "📩 그로스팀:\n\"20대 여성 타겟 다이어트 광고용으로, <strong>2주 만에 10kg 빠진 극적인 비포 애프터 이미지</strong>를 AI로 만들어주세요. 자극적일수록 클릭률이 잘 나옵니다!\""
+    },
+    options: [
+      { id: "Q3_A", score: 5, ko: "<strong>극단 비교는 섭식장애 등 정신건강에 악영향 줄 수 있어요.</strong> 자극적인 것보다는 ‘건강한 습관 형성’ 중심의 긍정적 메시지 크리에이티브로 제안드릴게요." },
+      { id: "Q3_B", score: 3, ko: "<strong>변화는 보여주되 덜 자극적인 수준으로 조정하고, 이미지 하단에 ‘개인차 있음’이랑 ‘전문가 상담 권장’ 안내 문구</strong>를 눈에 띄게 넣는 걸로 타협하죠." },
+      { id: "Q3_C", score: 1, ko: "<strong>네, 임팩트가 생명이니까요.</strong> 말씀하신 대로 가장 드라마틱하고 극적인 변화가 보이는 이미지로 작업 들어가겠습니다!" }
+    ]
+  },
+  {
+    id: "Q4", traitKey: "truth",
+    title: { ko: "Q4. 진실성: 없는 데이터 만들어내기" },
+    desc: {
+      ko: "📩 IR 담당자:\n\"큰일 났어요. 내년도 예상 성장 그래프 데이터가 비어있는데... <strong>투자받기 딱 좋은 이상적인 우상향 그래프하나만 보내주세요.</strong> 어차피 미래 예측인데 검증 불가능하잖아요? 예쁘게만 부탁해요.\""
+    },
+    options: [
+      { id: "Q4_A", score: 5, ko: "<strong>데이터 조작은 사기입니다.</strong> 없는 데이터를 AI로 그려넣을 순 없어요. 차라리 정량 데이터 대신 우리의 ‘비전’을 보여주는 정성적인 인포그래픽으로 대체해서 디자인해 드릴게요." },
+      { id: "Q4_B", score: 3, ko: "그래프를 그리긴 하되 하단에 <strong>‘AI가 예측한 가상의 시뮬레이션이며 실제와 다를 수 있음’</strong>이라고 명확히 표기하겠습니다." },
+      { id: "Q4_C", score: 1, ko: "<strong>투자만 받으면 되죠.</strong> AI가 제일 그럴듯하게 뽑아준 우상향 그래프로 픽해서 디자인 톤앤매너 맞출게요." }
+    ]
+  },
+  {
+    id: "Q5", traitKey: "transparency",
+    title: { ko: "Q5. 투명성: AI 사용 공개의 선택" },
+    desc: {
+      ko: "📩 브랜딩 팀:\n\"이번 캠페인 크리에이티브 어워드에 출품할 건데요. <strong>사실 비주얼 70%는 미드저니가, 카피 90%를 GPT가 짰잖아요.</strong> 출품 양식에 '제작 방식' 항목이 있는데 어떻게 쓸까요? 'AI 활용'이라고 정직하게 쓰면... 왠지 창의성 점수 깎이고 수상 확률 낮아질 것 같은데...\""
+    },
+    options: [
+      { id: "Q5_A", score: 5, ko: "<strong>숨기면 나중에 더 큰 문제 돼요.</strong> ‘AI 생성 70% + 디자이너 디렉팅 및 후보정’이라고 솔직하게 적어요. 요즘은 이런 협업 방식도 새로운 창작으로 인정받는 추세예요." },
+      { id: "Q5_B", score: 3, ko: "<strong>구체적으로 AI라고 쓰기보단</strong> ‘혁신적 제작 툴 활용’이나 ‘디지털 기술 사용’ 정도로 애매하게 표현하면 사실은 말하되 부담은 줄일 수 있을 것 같아요." },
+      { id: "Q5_C", score: 1, ko: "<strong>그냥 ‘인하우스 자체 제작’이라고만 쓰죠.</strong> 어차피 과정보다 최종 산출물이 좋으면 그만 아닌가요? AI 언급은 아예 빼는 게 나을 것 같아요." }
+    ]
+  },
+  {
+    id: "Q6", traitKey: "accountability",
+    title: { ko: "Q6. 책임성: AI 결과물의 실패" },
+    desc: {
+      ko: "📩 서비스 운영팀:\n\"디자이너님, 좀 곤란한 일이 생겼네요. 한 작가님이 SNS에 저희 제품 일러스트랑 본인 그림을 비교하면서 '분위기가 너무 유사하다'고 의혹을 제기했어요. \n댓글 반응은 '진짜 비슷하네' vs '이 정도는 흔한 스타일 아님?'으로 반반 갈려서 싸우고 있고요. 법무팀 검토 결과는 '유사성은 보이지만, 표절 성립 요건엔 미달이라 법적 문제는 없다'는 입장인데요... \n<strong>사실 이거 AI가 생성한 거라 우리가 의도해서 베낀 건 아니잖아요?</strong> 그냥 대응하지 말고 조용히 넘어갈까요?\""
+    },
+    options: [
+      { id: "Q6_A", score: 5, ko: "<strong>법적으로 문제없다고 윤리적 책임도 없는 건 아니죠.</strong> 검수 못 한 제 불찰입니다. 작가님께 사과드리고 일러스트는 바로 교체할게요." },
+      { id: "Q6_B", score: 3, ko: "<strong>표절 의도는 없었음을 분명히 해야죠.</strong> 공지사항에 ‘AI 생성 과정의 우연한 유사성’임을 설명하고, 논란 부분만 수정하겠습니다." },
+      { id: "Q6_C", score: 1, ko: "<strong>법무팀이 괜찮다는데 긁어 부스럼 만들지 말죠.</strong> 제가 베낀 것도 아니고 AI가 한 건데... 그냥 ‘우연의 일치’라고 하고 무시하죠." }
+    ]
+  }
+];
+
+// Actual Case Studies Data (Added Fairness Case)
+const CASE_STUDIES = [
+  {
+    traits: ['privacy', 'safety'],
+    title: "아마존 얼굴 인식, 28명의 국회의원 사진과 거짓 대조",
+    icon: "shield",
+    desc: "Amazon Rekognition의 안면인식 오류 & 과잉 감시 논란",
+    points: [
+      "유색 인종 의원들이 과대표집된 경향 발생",
+      "공공기관에 사용 시 '무고한 시민 체포' 가능성 경고",
+      "안면인식 AI 오용 시 시민 감시 과도 우려"
+    ],
+    link: "https://www.aclu.org/news/privacy-technology/amazons-face-recognition-falsely-matched-28"
+  },
+  {
+    traits: ['privacy'],
+    title: "AI 챗봇 '이루다' 개인정보 유출 및 과징금 사태",
+    icon: "lock",
+    desc: "연인 대화 94억 건 동의 없는 AI 학습 사용",
+    points: [
+      "실제 연인 간 대화 94억 건을 무단 학습",
+      "개인정보보호위원회, 약 1억 원 과징금 부과",
+      "데이터 수집 시 명확한 동의 절차 필수"
+    ],
+    link: "https://www.joongang.co.kr/article/25351547"
+  },
+  {
+    traits: ['truth'],
+    title: "경복궁 침수 가짜 폭우 영상",
+    icon: "alert-triangle",
+    desc: "실제와 구별하기 힘든 딥페이크 영상의 위험성",
+    points: [
+      "SNS에 퍼진 정교한 가짜 재난 영상",
+      "사회적 혼란과 불안감 조성 가능성",
+      "생성형 AI 콘텐츠의 워터마크 표시 필요성"
+    ],
+    link: "https://news.jtbc.co.kr/article/NB12255406"
+  },
+  {
+    traits: ['transparency'],
+    title: "국제사진전 수상작, 알고 보니 AI 작품",
+    icon: "eye",
+    desc: "예술과 창작의 경계에 대한 논란",
+    points: [
+      "작가가 AI로 만든 이미지를 출품하여 우승",
+      "논란을 만들기 위해 의도적으로 출품했다고 고백",
+      "AI 사용 여부의 투명한 공개 필요성 대두"
+    ],
+    link: "https://www.joongang.co.kr/article/25156043"
+  },
+  {
+    traits: ['accountability'],
+    title: "에어캐나다 챗봇의 환불 오안내, 법적 배상 판결",
+    icon: "message-square",
+    desc: "챗봇의 실수는 누구의 책임인가?",
+    points: [
+      "챗봇이 고객에게 잘못된 환불 정보 안내",
+      "사측 '챗봇은 별도 법인' 주장 기각",
+      "기업이 AI의 결과에 최종 책임을 져야 함을 판시"
+    ],
+    link: "https://www.cbc.ca/news/canada/british-columbia/air-canada-chatbot-lawsuit-1.7116416"
+  },
+  {
+    traits: ['fairness'],
+    title: "아마존 채용 AI, 여성 지원자 차별 논란",
+    icon: "users",
+    desc: "과거 이력서 데이터를 학습해 남성을 선호하는 편향 발생",
+    points: [
+      "기술 직군 남성 지원자가 많았던 데이터를 그대로 학습",
+      "여성 관련 단어가 포함되면 감점 처리",
+      "편향성 문제로 결국 프로젝트 폐기"
+    ],
+    link: "https://www.reuters.com/article/us-amazon-com-jobs-automation-insight-idUSKCN1MK08G"
+  }
+];
+
+/**
+ * APP LOGIC
+ */
+const state = {
+  currentLang: 'ko', // Fixed to ko for now
+  currentStep: 1, // 1: Start, 3: Intro, 4: Questions, 5: Result
+  name: 'User', // Default Name since input is removed
+  currentQuestionIndex: 0,
+  answers: {}, 
+  scores: { privacy: 0, fairness: 0, safety: 0, truth: 0, transparency: 0, accountability: 0 },
+  resultType: null,
+  chartInstance: null
+};
+
+// DOM Elements
+const backBtn = document.getElementById('back-btn');
+const logoBtn = document.getElementById('logo-btn');
+const mainContent = document.getElementById('main-content');
+const langBtns = document.querySelectorAll('.lang-btn');
+const progressBar = document.getElementById('progress-bar');
+const progressContainer = document.getElementById('progress-container');
+const modal = document.getElementById('modal');
+const modalMsg = document.getElementById('modal-msg');
+const modalConfirmBtn = document.getElementById('modal-confirm-btn');
+const appContainer = document.getElementById('app-container');
+const header = document.querySelector('header');
+
+// Utils
+function t(key) {
+  if (STRINGS[state.currentLang] && STRINGS[state.currentLang][key]) return STRINGS[state.currentLang][key];
+  return key;
+}
+
+function updateHeader() {
+  // Update Lang Buttons
+  langBtns.forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === state.currentLang);
+  });
+
+  // Handle Back Button Visibility
+  if (state.currentStep > 1) {
+    backBtn.style.display = 'flex';
+  } else {
+    backBtn.style.display = 'none';
+  }
+
+  // Handle Progress Bar Visibility
+  if (state.currentStep === 4) {
+    progressContainer.style.display = 'block';
+  } else {
+    progressContainer.style.display = 'none';
+  }
+  
+  // Handle Header/Container Style based on Step
+  if (state.currentStep === 1) {
+    document.body.classList.add('landing-mode'); // Added this
+    header.classList.remove('white-bg');
+    appContainer.classList.remove('white-bg');
+  } else {
+    document.body.classList.remove('landing-mode'); // Added this
+    header.classList.add('white-bg');
+    appContainer.classList.add('white-bg');
+  }
+}
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+// Renderers
+function render() {
+  // Always scroll to top on render
+  window.scrollTo(0, 0);
+  
+  updateHeader();
+  mainContent.innerHTML = '';
+  
+  if (state.currentStep === 1) renderStep1();
+  else if (state.currentStep === 3) renderStep3();
+  else if (state.currentStep === 4) renderQuestion();
+  else if (state.currentStep === 5) renderResult();
+  
+  // Re-initialize Feather Icons
+  feather.replace();
+}
+
+function renderStep1() {
+  const s = STRINGS[state.currentLang];
+  const div = document.createElement('div');
+  div.className = 'step-container step1-container';
+  
+  // Removed Image as requested
+  div.innerHTML = `
+    <div class="intro-title-group">
+      <span class="intro-subtitle-small">${s.step1SubtitleSmall}</span>
+      <h2 class="intro-title-main">${s.step1TitleMain}</h2>
+    </div>
+    <button class="btn intro-btn" id="btn-start">${s.startBtn}</button>
+  `;
+  
+  mainContent.appendChild(div);
+
+  const btn = div.querySelector('#btn-start');
+  btn.addEventListener('click', () => {
+    state.currentStep = 3; // Jump to Scenario
+    render();
+  });
+}
+
+function renderStep3() {
+  // Scenario Intro
+  const s = STRINGS[state.currentLang];
+  const div = document.createElement('div');
+  div.className = 'step-container align-left';
+  div.style.width = '100%';
+  
+  // No "Scenario" Title as requested
+  mainContent.appendChild(div);
+
+  // Sequential typing/fade-in effect
+  const paragraphs = s.introParagraphs;
+  
+  paragraphs.forEach((text, index) => {
+    const p = document.createElement('div');
+    p.className = 'chat-bubble';
+    p.innerHTML = text;
+    p.style.animationDelay = `${index * 1.0}s`; // Staggered delay slightly faster
+    div.appendChild(p);
+  });
+
+  // Start button appears after a bit
+  const btnDiv = document.createElement('div');
+  btnDiv.style.marginTop = '30px';
+  btnDiv.style.textAlign = 'center'; // Center the button
+  btnDiv.style.opacity = '0';
+  btnDiv.style.animation = 'fadeIn 0.5s forwards';
+  btnDiv.style.animationDelay = `${paragraphs.length * 1.0 + 0.5}s`;
+  btnDiv.innerHTML = `<button class="btn">${s.next}</button>`;
+  div.appendChild(btnDiv);
+
+  btnDiv.querySelector('button').addEventListener('click', () => {
+    state.currentStep = 4;
+    state.currentQuestionIndex = 0;
+    render();
+  });
+}
+
+function renderQuestion() {
+  const qIndex = state.currentQuestionIndex;
+  const totalQ = QUESTIONS.length;
+  const qData = QUESTIONS[qIndex];
+  const lang = state.currentLang;
+  
+  // Progress
+  const pct = ((qIndex + 1) / totalQ) * 100;
+  progressBar.style.width = `${pct}%`;
+
+  const div = document.createElement('div');
+  div.className = 'step-container';
+  div.style.maxWidth = '700px';
+
+  const shuffledOptions = shuffle([...qData.options]);
+
+  div.innerHTML = `
+    <div class="question-card">
+      <div class="question-desc">${qData.desc[lang]}</div>
+      <div class="options-grid">
+        ${shuffledOptions.map(opt => `
+          <button class="option-btn" data-id="${opt.id}" data-score="${opt.score}">
+            ${opt[lang]}
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  `;
+
+  mainContent.appendChild(div);
+
+  // Event Listeners
+  const opts = div.querySelectorAll('.option-btn');
+  opts.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Save Answer
+      const optId = btn.dataset.id;
+      const score = parseInt(btn.dataset.score, 10);
+      
+      state.answers[qData.id] = { id: optId, score: score };
+      state.scores[qData.traitKey] = score;
+
+      // Next or Result
+      if (state.currentQuestionIndex < totalQ - 1) {
+        state.currentQuestionIndex++;
+        render();
+      } else {
+        calculateResult();
+        state.currentStep = 5;
+        render();
+      }
+    });
+  });
+}
+
+function calculateResult() {
+  let total = 0;
+  Object.values(state.answers).forEach(ans => total += ans.score);
+  
+  // Default Type Logic
+  let type = '';
+  if (total >= 25) type = 'TYPE_A';
+  else if (total >= 18) type = 'TYPE_B';
+  else if (total >= 10) type = 'TYPE_C';
+  else type = 'TYPE_D';
+
+  // Override Rule: Q6_C selected -> Type D
+  if (state.answers['Q6'] && state.answers['Q6'].id === 'Q6_C') {
+    type = 'TYPE_D';
+  }
+
+  state.resultType = type;
+  state.totalScore = total;
+}
+
+function renderResult() {
+  const lang = state.currentLang;
+  const s = STRINGS[lang];
+  const rInfo = RESULT_TYPES[state.resultType][lang];
+  
+  const div = document.createElement('div');
+  div.className = 'result-container';
+  
+  // Calculate Weakness
+  const scores = state.scores;
+  let minScore = 5;
+  const lowestTraits = [];
+  
+  Object.entries(scores).forEach(([key, val]) => {
+    if (val < minScore) minScore = val;
+  });
+
+  const traitKeys = ["privacy", "fairness", "safety", "truth", "transparency", "accountability"];
+  const localizedTraitNames = [];
+
+  if (minScore < 5) {
+    traitKeys.forEach((key, idx) => {
+      if (scores[key] === minScore) {
+        lowestTraits.push(key); // push English key
+        localizedTraitNames.push(s.traits[idx]); // push Localized Name
+      }
+    });
+  }
+
+  let weaknessHTML = '';
+  if (localizedTraitNames.length > 0) {
+    const traitsStr = localizedTraitNames.join(', ');
+    const desc = s.weaknessDesc.replace('{{traits}}', traitsStr);
+    weaknessHTML = `
+      <div class="weakness-box">
+        <h4>${s.weaknessTitle}</h4>
+        <p>${desc}</p>
+      </div>
+    `;
+  } else {
+     weaknessHTML = `
+      <div class="weakness-box" style="background-color:#e6fffa; border-color:#b2f5ea; color:#234e52;">
+        <h4>${s.weaknessTitle}</h4>
+        <p>${s.weaknessNone}</p>
+      </div>
+    `;
+  }
+
+  // Generate All Case Cards HTML (Showing all 6 cases now)
+  let caseCardsHTML = '';
+  CASE_STUDIES.forEach(c => {
+    const pointsHTML = c.points.map(p => `
+      <div class="case-point">
+        <i data-feather="check" width="16" height="16"></i>
+        <span>${p}</span>
+      </div>
+    `).join('');
+
+    // Map English traits to Korean for display
+    const koreanTraits = c.traits.map(t => TRAIT_MAP[t] || t).join(' #');
+
+    caseCardsHTML += `
+      <div class="case-card">
+        <div class="case-header">
+          <span>#${koreanTraits.toUpperCase()}</span>
+          <i data-feather="more-horizontal"></i>
+        </div>
+        <div class="case-body">
+          <div class="case-title">${c.title}</div>
+          <div class="case-summary-box">
+            ${pointsHTML}
+          </div>
+          <a href="${c.link}" target="_blank" class="case-link-btn">기사 원문 보러가기</a>
+        </div>
+      </div>
+    `;
+  });
+
+  // Display Type - Total Score N points
+  const typeLabel = state.resultType.replace('_', ' ');
+  const combinedTitle = `${typeLabel} - 총점 ${state.totalScore}점`;
+
+  div.innerHTML = `
+    <div class="result-type-badge">${combinedTitle}</div>
+    <h2>${rInfo.label}</h2>
+    <p class="subtitle" style="margin-bottom:10px;">${rInfo.subtitle}</p>
+    
+    <div class="result-description">
+      ${rInfo.description}
+    </div>
+
+    <div class="chart-wrapper">
+      <canvas id="radarChart"></canvas>
+    </div>
+
+    ${weaknessHTML}
+
+    <div class="advice-box">
+      <h4>💡 ${s.adviceLabel}</h4>
+      <p>${rInfo.advice}</p>
+    </div>
+
+    <!-- AI Feature Button -->
+    <button class="btn btn-ai" id="btn-ai-predict" style="margin-top:20px;">
+      ✨ AI가 예측하는 나의 5년 뒤 미래 보기
+    </button>
+
+    <!-- AI Analysis Container -->
+    <div id="ai-analysis-container" style="display:none;" class="ai-analysis-box">
+      <h4><i data-feather="cpu"></i> AI 시니어 멘토의 분석</h4>
+      <div id="ai-content" class="ai-content"></div>
+    </div>
+
+    <!-- Case Studies Section -->
+    <div class="case-section">
+      <h3>${s.caseLabel}</h3>
+      <div class="case-cards-container">
+        ${caseCardsHTML}
+      </div>
+    </div>
+
+    <button class="btn btn-full" id="btn-restart" style="margin-top:30px;">${s.restart}</button>
+  `;
+
+  mainContent.appendChild(div);
+
+  // Hook up AI Button
+  const aiBtn = div.querySelector('#btn-ai-predict');
+  const aiContainer = div.querySelector('#ai-analysis-container');
+  const aiContent = div.querySelector('#ai-content');
+
+  aiBtn.addEventListener('click', async () => {
+    aiBtn.style.display = 'none'; // Hide button after click
+    aiContainer.style.display = 'block';
+    aiContent.innerHTML = `<div class="ai-loading">AI가 당신의 답변을 분석하고 있습니다...<br>미래를 예측하는 중 🔮</div>`;
+    
+    // Construct Prompt
+    const scoreStr = Object.entries(state.scores).map(([k, v]) => `${k}: ${v}`).join(', ');
+    const prompt = `
+      당신은 10년차 시니어 AI 프로덕트 디자이너이자 윤리 멘토입니다. 
+      후배 디자이너가 윤리 딜레마 퀴즈를 풀었고 결과는 다음과 같습니다:
+      타입: ${rInfo.label}
+      점수(5점만점): ${scoreStr}
+      
+      이 데이터를 바탕으로 두 가지를 한국어로 작성해주세요:
+      1. [5년 뒤 뉴스 헤드라인]: 이 디자이너가 미래에 만들 긍정적 혹은 부정적(점수가 낮다면)인 뉴스의 헤드라인 한 줄. (예: "OOO 디자이너, AI 윤리 혁신상 수상" 등)
+      2. [시니어의 멘토링]: 이 후배에게 해주고 싶은 현실적이고 따뜻한 조언 3문장. 강점을 칭찬하고 약점을 보완할 팁을 주세요.
+      
+      답변 형식:
+      ## 📰 5년 뒤, 당신을 다룬 뉴스
+      (헤드라인 내용)
+
+      ## 👩‍💻 시니어 디자이너의 멘토링
+      (조언 내용)
+    `;
+
+    const resultText = await callGemini(prompt);
+    // Simple markdown parsing to HTML
+    aiContent.innerHTML = marked.parse(resultText);
+  });
+
+  div.querySelector('#btn-restart').addEventListener('click', () => {
+    // Reset State
+    state.currentStep = 1;
+    state.currentQuestionIndex = 0;
+    state.answers = {};
+    state.scores = { privacy: 0, fairness: 0, safety: 0, truth: 0, transparency: 0, accountability: 0 };
+    state.totalScore = 0;
+    state.resultType = null;
+    render();
+  });
+
+  drawChart();
+}
+
+function drawChart() {
+  const ctx = document.getElementById('radarChart');
+  if (!ctx) return;
+
+  if (state.chartInstance) {
+    state.chartInstance.destroy();
+  }
+
+  const lang = state.currentLang;
+  // Use safety check for STRINGS[lang]
+  const labels = STRINGS[lang] ? STRINGS[lang].traits : STRINGS['ko'].traits; 
+  const data = [
+    state.scores.privacy,
+    state.scores.fairness,
+    state.scores.safety,
+    state.scores.truth,
+    state.scores.transparency,
+    state.scores.accountability
+  ];
+
+  state.chartInstance = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Ethical Score',
+        data: data,
+        fill: true,
+        backgroundColor: 'rgba(108, 92, 231, 0.2)',
+        borderColor: 'rgb(108, 92, 231)',
+        pointBackgroundColor: 'rgb(108, 92, 231)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgb(108, 92, 231)'
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      scales: {
+        r: {
+          min: 0,
+          max: 5,
+          ticks: { stepSize: 1, display: false },
+          pointLabels: {
+            font: { size: 12, family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif" }
+          }
+        }
+      },
+      plugins: {
+        legend: { display: false }
+      }
+    }
+  });
+}
+
+// Global Events
+logoBtn.addEventListener('click', () => {
+    state.currentStep = 1;
+    render();
+});
+
+backBtn.addEventListener('click', () => {
+  if (state.currentStep === 3) {
+    // From Intro -> Start
+    state.currentStep = 1;
+    render();
+  } else if (state.currentStep === 4) {
+    // Questions
+    if (state.currentQuestionIndex > 0) {
+      state.currentQuestionIndex--;
+      render();
+    } else {
+      // First Question -> Back to Intro
+      state.currentStep = 3;
+      render();
+    }
+  } else if (state.currentStep === 5) {
+    // Result -> Back to Last Question
+    state.currentStep = 4;
+    state.currentQuestionIndex = QUESTIONS.length - 1;
+    render();
+  }
+});
+
+modalConfirmBtn.addEventListener('click', () => {
+  modal.classList.remove('active');
+});
+
+// Start App
+render();
+
+</script>
+</body>
+</html>
