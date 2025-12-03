@@ -86,15 +86,16 @@
 
     /* Header - Updated for Absolute Centering */
     header {
-      padding: 20px 40px;
+      padding: 10px 20px;
       background: transparent;
       border-bottom: none;
-      display: flex;
+      display: flex; /* Changed from grid to flex */
       justify-content: space-between;
       align-items: center;
       z-index: 10;
-      height: 50px; /* Reduced height */
-      position: relative; /* Needed for absolute centering */
+      height: 70px;
+      position: relative; /* For absolute centering of child */
+      flex-shrink: 0; /* Prevent header from shrinking */
     }
     
     header.white-bg {
@@ -106,19 +107,18 @@
       display: flex;
       align-items: center;
       min-width: 40px;
-      z-index: 20;
+      z-index: 20; /* Above center */
     }
     
     .header-center {
-      position: absolute;
+      position: absolute; /* Absolute positioning */
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-      z-index: 10;
       display: flex;
       justify-content: center;
       align-items: center;
-      width: auto;
+      z-index: 10;
     }
     
     .header-right {
@@ -126,19 +126,19 @@
       align-items: center;
       justify-content: flex-end;
       min-width: 40px;
-      z-index: 20;
+      z-index: 20; /* Above center */
     }
 
     .header-logo-btn {
       background: none;
       border: none;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 800;
       color: var(--primary-color);
       cursor: pointer;
       letter-spacing: -0.5px;
       transition: opacity 0.2s;
-      white-space: nowrap;
+      white-space: nowrap; /* Prevent line break */
     }
     .header-logo-btn:hover {
       opacity: 0.8;
@@ -175,48 +175,33 @@
       background-color: rgba(255,255,255,0.1);
     }
 
-    /* Language Toggle */
-    .lang-toggle {
-      display: flex; 
-      gap: 4px;
+    /* Language Select (New Style) */
+    .lang-select {
       background: #f1f2f6;
-      padding: 4px;
-      border-radius: 8px;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-sub);
+      cursor: pointer;
+      outline: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      text-align: center;
     }
     
-    /* Landing Mode Language Toggle */
-    body.landing-mode .lang-toggle {
+    /* Landing Mode Language Select */
+    body.landing-mode .lang-select {
       background: rgba(255, 255, 255, 0.2);
+      color: #fff;
       backdrop-filter: blur(5px);
     }
-
-    .lang-btn {
-      border: none;
-      background: none;
-      padding: 6px 10px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      cursor: pointer;
-      border-radius: 6px;
-      color: var(--text-sub);
-      transition: all 0.2s;
-    }
-
-    .lang-btn.active {
-      background: #fff;
-      color: var(--primary-color);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
     
-    /* Landing Mode Button Styles */
-    body.landing-mode .lang-btn {
-      color: rgba(255, 255, 255, 0.8);
-    }
-    
-    body.landing-mode .lang-btn.active {
-      background: #fff;
-      color: var(--primary-color);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    body.landing-mode .lang-select option {
+      background-color: var(--primary-color); /* Fallback color */
+      color: #333;
     }
 
     /* Progress Bar (Moved to Top) */
@@ -248,6 +233,7 @@
       max-width: 700px; /* Readable width for content */
       animation: fadeIn 0.4s ease-out;
       text-align: center;
+      padding-bottom: 60px; /* Extra space at bottom for scrolling */
     }
 
     .step-container.step1-container {
@@ -387,12 +373,12 @@
     /* Scenario & Chat Bubble Styles */
     .chat-bubble {
       background: var(--box-gray);
-      padding: 24px; /* Larger padding */
+      padding: 24px; 
       border-radius: 20px;
       border-bottom-left-radius: 4px;
-      margin-bottom: 16px;
-      line-height: 1.65; /* Increased for better reading */
-      font-size: 1.1rem; /* Larger font to match options */
+      margin-bottom: 8px; /* Reduced gap to 8px */
+      line-height: 1.65;
+      font-size: 1.1rem; 
       position: relative;
       opacity: 0;
       animation: messagePop 0.5s forwards;
@@ -416,7 +402,7 @@
       border: none;
       margin-bottom: 30px;
       line-height: 1.7; /* Good readability */
-      font-size: 1.2rem; /* Larger font to match options */
+      font-size: 1.1rem; /* Larger font to match options */
       white-space: pre-line;
       text-align: left;
     }
@@ -499,6 +485,39 @@
     }
     .advice-box p {
       font-size: 1.05rem; /* Approx 16.8px */
+    }
+
+    /* AI Analysis Box */
+    .ai-analysis-box {
+      background: var(--ai-bg);
+      border: 2px solid var(--primary-light);
+      padding: 30px;
+      border-radius: 16px;
+      margin-top: 30px;
+      text-align: left;
+      line-height: 1.7;
+      animation: fadeIn 0.5s ease-out;
+    }
+    .ai-analysis-box h4 {
+      color: var(--primary-color);
+      margin-bottom: 15px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.2rem;
+    }
+    .ai-loading {
+      text-align: center;
+      color: var(--primary-color);
+      padding: 30px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      line-height: 1.5;
+    }
+    .ai-content p {
+      margin-bottom: 10px;
+      font-size: 1.05rem;
     }
 
     /* Weakness Box */
@@ -699,11 +718,11 @@
       <button id="logo-btn" class="header-logo-btn">AI Ethics Quiz</button>
     </div>
     <div class="header-right">
-      <div class="lang-toggle">
-        <button class="lang-btn active" data-lang="ko">KO</button>
-        <button class="lang-btn" data-lang="en">EN</button>
-        <button class="lang-btn" data-lang="zh">ZH</button>
-      </div>
+      <select id="lang-select" class="lang-select">
+        <option value="ko">KO</option>
+        <option value="en">EN</option>
+        <option value="zh">ZH</option>
+      </select>
     </div>
   </header>
 
@@ -836,7 +855,7 @@ const TRAIT_MAP_ZH = {
   accountability: '责任'
 };
 
-// ... RESULT_TYPES, QUESTIONS ...
+// ... RESULT_TYPES, QUESTIONS, CASE_STUDIES (Keep existing) ...
 const RESULT_TYPES = {
   TYPE_A: {
     ko: { label: "🛡️ 고독한 윤리 가디언", subtitle: "\"내 눈에 흙이 들어가도 안 돼!\"", description: "당신은 원칙과 양심을 최우선으로 두는, 팀의 마지막 방어선 같은 디자이너입니다.\n다수의 압박과 촉박한 일정 속에서도 ‘이건 아니잖아요’라는 말을 용기 있게 꺼낼 수 있는 사람입니다.", advice: "다만 모든 싸움을 혼자 다 떠안으려고 하면 쉽게 번아웃이 올 수 있어요. 동료와 기준을 공유하고, 조직 차원의 룰을 만드는 데 힘을 쓰면 당신의 부담이 줄어듭니다." },
@@ -1283,6 +1302,7 @@ const modalMsg = document.getElementById('modal-msg');
 const modalConfirmBtn = document.getElementById('modal-confirm-btn');
 const appContainer = document.getElementById('app-container');
 const header = document.querySelector('header');
+const langSelect = document.getElementById('lang-select');
 
 // Utils
 function t(key) {
@@ -1577,10 +1597,12 @@ function renderResult() {
   };
 
   CASE_STUDIES.forEach(c => {
-    // Title is currently defined as an object in CASE_STUDIES above
+    // Title/Desc/Points are now localized objects
     const cTitle = c.title[lang] || c.title['ko'];
-    const cDesc = c.desc[lang] || c.desc['ko'];
+    const cDesc = c.desc[lang] || c.desc['ko']; // Fallback logic
+    // Points
     const cPoints = c.points[lang] || c.points['ko'];
+    
     const btnText = {ko: "기사 원문 보러가기", en: "Read Full Article", zh: "查看原文"}[lang] || "기사 원문 보러가기";
 
     const pointsHTML = cPoints.map(p => `
@@ -1590,7 +1612,7 @@ function renderResult() {
       </div>
     `).join('');
 
-    // Map English traits to Korean for display
+    // Map English traits to Localized for display
     const localizedTraits = c.traits.map(t => getLocalizedTrait(t) || t).join(' #');
 
     caseCardsHTML += `
@@ -1748,12 +1770,10 @@ backBtn.addEventListener('click', () => {
   }
 });
 
-langBtns.forEach(btn => {
-  btn.addEventListener('click', (e) => {
-    const lang = e.target.dataset.lang;
-    state.currentLang = lang;
-    render();
-  });
+// Change to select event listener
+langSelect.addEventListener('change', (e) => {
+  state.currentLang = e.target.value;
+  render();
 });
 
 modalConfirmBtn.addEventListener('click', () => {
