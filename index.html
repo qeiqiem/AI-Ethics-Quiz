@@ -84,16 +84,17 @@
       background-color: #ffffff;
     }
 
-    /* Header */
+    /* Header - Updated for Absolute Centering */
     header {
-      padding: 20px 40px; /* More padding for desktop feel */
+      padding: 20px 40px;
       background: transparent;
       border-bottom: none;
-      display: grid;
-      grid-template-columns: 40px 1fr 40px; /* Left Center Right layout */
+      display: flex;
+      justify-content: space-between;
       align-items: center;
       z-index: 10;
-      height: 70px;
+      height: 50px; /* Reduced height */
+      position: relative; /* Needed for absolute centering */
     }
     
     header.white-bg {
@@ -104,24 +105,40 @@
     .header-left {
       display: flex;
       align-items: center;
-      justify-content: flex-start;
+      min-width: 40px;
+      z-index: 20;
     }
     
     .header-center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
       display: flex;
       justify-content: center;
       align-items: center;
+      width: auto;
+    }
+    
+    .header-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      min-width: 40px;
+      z-index: 20;
     }
 
     .header-logo-btn {
       background: none;
       border: none;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       font-weight: 800;
       color: var(--primary-color);
       cursor: pointer;
       letter-spacing: -0.5px;
       transition: opacity 0.2s;
+      white-space: nowrap;
     }
     .header-logo-btn:hover {
       opacity: 0.8;
@@ -158,8 +175,48 @@
       background-color: rgba(255,255,255,0.1);
     }
 
+    /* Language Toggle */
     .lang-toggle {
-      display: none; 
+      display: flex; 
+      gap: 4px;
+      background: #f1f2f6;
+      padding: 4px;
+      border-radius: 8px;
+    }
+    
+    /* Landing Mode Language Toggle */
+    body.landing-mode .lang-toggle {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(5px);
+    }
+
+    .lang-btn {
+      border: none;
+      background: none;
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      border-radius: 6px;
+      color: var(--text-sub);
+      transition: all 0.2s;
+    }
+
+    .lang-btn.active {
+      background: #fff;
+      color: var(--primary-color);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    /* Landing Mode Button Styles */
+    body.landing-mode .lang-btn {
+      color: rgba(255, 255, 255, 0.8);
+    }
+    
+    body.landing-mode .lang-btn.active {
+      background: #fff;
+      color: var(--primary-color);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
     /* Progress Bar (Moved to Top) */
@@ -327,8 +384,6 @@
       box-shadow: 0 6px 20px rgba(0,0,0,0.3);
     }
 
-    /* Main Illustration REMOVED */
-    
     /* Scenario & Chat Bubble Styles */
     .chat-bubble {
       background: var(--box-gray);
@@ -337,7 +392,7 @@
       border-bottom-left-radius: 4px;
       margin-bottom: 16px;
       line-height: 1.65; /* Increased for better reading */
-      font-size: 1.1rem; /* Larger font */
+      font-size: 1.1rem; /* Larger font to match options */
       position: relative;
       opacity: 0;
       animation: messagePop 0.5s forwards;
@@ -361,7 +416,7 @@
       border: none;
       margin-bottom: 30px;
       line-height: 1.7; /* Good readability */
-      font-size: 1.2rem;
+      font-size: 1.2rem; /* Larger font to match options */
       white-space: pre-line;
       text-align: left;
     }
@@ -379,7 +434,7 @@
       border-radius: 16px;
       text-align: left;
       cursor: pointer;
-      font-size: 1.1rem;
+      font-size: 1.1rem; /* Increased font size */
       transition: all 0.2s;
       line-height: 1.6; /* Increased line-height */
       color: var(--text-main);
@@ -446,39 +501,6 @@
       font-size: 1.05rem; /* Approx 16.8px */
     }
 
-    /* AI Analysis Box */
-    .ai-analysis-box {
-      background: var(--ai-bg);
-      border: 2px solid var(--primary-light);
-      padding: 30px;
-      border-radius: 16px;
-      margin-top: 30px;
-      text-align: left;
-      line-height: 1.7;
-      animation: fadeIn 0.5s ease-out;
-    }
-    .ai-analysis-box h4 {
-      color: var(--primary-color);
-      margin-bottom: 15px;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 1.2rem;
-    }
-    .ai-loading {
-      text-align: center;
-      color: var(--primary-color);
-      padding: 30px;
-      font-weight: bold;
-      font-size: 1.1rem;
-      line-height: 1.5;
-    }
-    .ai-content p {
-      margin-bottom: 10px;
-      font-size: 1.05rem;
-    }
-
     /* Weakness Box */
     .weakness-box {
       background-color: var(--warning-bg);
@@ -505,22 +527,23 @@
 
     /* Case Study Cards */
     .case-section {
-      margin-top: 60px;
-      text-align: left;
+      margin-top: 80px;
+      text-align: center; /* Centered text */
     }
     .case-section h3 {
       font-size: 1.5rem;
       margin-bottom: 40px; /* Increased margin */
       color: var(--text-main);
-      text-align: center; /* Changed back to center */
       line-height: 1.4;
       font-weight: 800;
+      text-align: center; /* Changed to Center */
     }
     
     .case-cards-container {
       display: flex;
       flex-direction: column;
       gap: 20px;
+      text-align: left; /* Cards themselves are left-aligned */
     }
     
     /* Grid for desktop case studies */
@@ -675,7 +698,13 @@
     <div class="header-center">
       <button id="logo-btn" class="header-logo-btn">AI Ethics Quiz</button>
     </div>
-    <div class="header-right" style="width: 40px;"></div> <!-- Spacer for balance -->
+    <div class="header-right">
+      <div class="lang-toggle">
+        <button class="lang-btn active" data-lang="ko">KO</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="zh">ZH</button>
+      </div>
+    </div>
   </header>
 
   <!-- Progress Bar moved here -->
@@ -696,50 +725,20 @@
 </div>
 
 <script>
-// Gemini API Key
-const apiKey = ""; 
-
-// Gemini API Call Function
-async function callGemini(prompt) {
-  try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        contents: [{
-          parts: [{ text: prompt }]
-        }]
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data.candidates?.[0]?.content?.parts?.[0]?.text || "분석을 가져올 수 없습니다.";
-  } catch (error) {
-    console.error("Gemini API Error:", error);
-    return "죄송합니다. 현재 AI 분석을 사용할 수 없습니다. 잠시 후 다시 시도해주세요.";
-  }
-}
 
 /**
  * DATA & STRINGS
+ * (Partial translation placeholders for EN/ZH)
  */
 const STRINGS = {
   ko: {
-    // Step 1 (Updated Titles)
     step1SubtitleSmall: "나의 디자인 윤리는 어느 정도일까?",
     step1TitleMain: "디자이너 AI 윤리<br>딜레마 퀴즈",
     startBtn: "시작하기",
-    
     next: "메시지 확인하기",
     restart: "다시하기",
+    caseLinkBtn: "기사 원문 보러가기",
     
-    // Step 3 Intro
     introParagraphs: [
       "나는 시리즈 A 투자를 받은, 성장 속도가 무서운 AI 스타트업의 디자이너.",
       "사내 슬로건은 <strong>Just Ask AI</strong>",
@@ -749,19 +748,68 @@ const STRINGS = {
       "(지잉- 지잉-)",
       "..아, 또 알림이다."
     ],
-    // Results
-    totalScoreLabel: "총점 ", // Not used directly in large text anymore
+    totalScoreLabel: "총점 ", 
     adviceLabel: "TIP",
     caseLabel: "📰 윤리를 위반한 뉴스 사례",
     traits: ["프라이버시", "공정성", "안전성", "진실성", "투명성", "책임성"],
     weaknessTitle: "💡 주의가 필요한 영역",
     weaknessDesc: "이번 퀴즈에서 특히 점수가 낮았던 영역은 <strong>'{{traits}}'</strong>입니다.<br>실무에서 이 영역을 조금 더 신경 쓰면, 전체적인 디자인 윤리가 한 단계 올라갈 수 있어요.",
     weaknessNone: "모든 영역에서 높은 점수를 받았습니다! 지금처럼 훌륭한 윤리 기준을 계속 지켜주세요."
+  },
+  en: {
+    step1SubtitleSmall: "How ethical is my design?",
+    step1TitleMain: "Designer AI Ethics<br>Dilemma Quiz",
+    startBtn: "Start Quiz",
+    next: "Check Message",
+    restart: "Restart",
+    caseLinkBtn: "Read Full Article",
+    
+    introParagraphs: [
+      "I am a designer at a fast-growing AI startup that just received Series A funding.",
+      "Our slogan is <strong>Just Ask AI</strong>",
+      "Work is endless and we are always short-staffed, so using AI is highly encouraged.",
+      "People say, <strong>\"Hey designer, can't you just run this through AI?\"</strong>",
+      "Every day, I walk a tightrope between efficiency and conscience. Compromising quality feels wrong, but insisting on ethics blows up the schedule.",
+      "(Buzz... Buzz...)",
+      "..Ah, another notification."
+    ],
+    totalScoreLabel: "Total Score ",
+    adviceLabel: "TIP",
+    caseLabel: "📰 Ethical Violation Cases",
+    traits: ["Privacy", "Fairness", "Safety", "Truthfulness", "Transparency", "Accountability"],
+    weaknessTitle: "💡 Areas Needing Attention",
+    weaknessDesc: "The areas with lower scores in this quiz were <strong>'{{traits}}'</strong>.<br>Paying a bit more attention here in practice can elevate your overall design ethics.",
+    weaknessNone: "You scored high in all areas! Please keep up your excellent ethical standards."
+  },
+  zh: {
+    step1SubtitleSmall: "我的设计伦理水平如何？",
+    step1TitleMain: "设计师 AI 伦理<br>困境测验",
+    startBtn: "开始测验",
+    next: "查看消息",
+    restart: "重新开始",
+    caseLinkBtn: "查看原文",
+    
+    introParagraphs: [
+      "我是一家刚获得 A 轮融资、增长迅猛的 AI 初创公司的设计师。",
+      "公司的口号是 <strong>Just Ask AI</strong>",
+      "这里活永远干不完，人手永远不够，所以公司积极鼓励使用 AI。",
+      "大家总说：<strong>“设计师，这个用 AI 跑一下不是很快吗？”</strong>",
+      "我每天都在效率和良心之间走钢丝。牺牲质量心里过不去，坚持伦理又会赶不上进度。",
+      "(嗡... 嗡...)",
+      "..啊，又来通知了。"
+    ],
+    totalScoreLabel: "总分 ",
+    adviceLabel: "建议",
+    caseLabel: "📰 违反伦理的新闻案例",
+    traits: ["隐私", "公平性", "安全性", "真实性", "透明性", "责任"],
+    weaknessTitle: "💡 需要注意的领域",
+    weaknessDesc: "本次测验中得分较低的领域是<strong>“{{traits}}”</strong>。<br>在实际工作中多加留意这些方面，你的整体设计伦理水平将更上一层楼。",
+    weaknessNone: "你在所有领域都获得了高分！请继续保持这样优秀的伦理标准。"
   }
 };
 
 // Trait Mapping for Korean Tags
-const TRAIT_MAP = {
+const TRAIT_MAP_KO = {
   privacy: '프라이버시',
   fairness: '공정성',
   safety: '안전성',
@@ -770,168 +818,441 @@ const TRAIT_MAP = {
   accountability: '책임성'
 };
 
+const TRAIT_MAP_EN = {
+  privacy: 'Privacy',
+  fairness: 'Fairness',
+  safety: 'Safety',
+  truth: 'Truth',
+  transparency: 'Transparency',
+  accountability: 'Accountability'
+};
+
+const TRAIT_MAP_ZH = {
+  privacy: '隐私',
+  fairness: '公平性',
+  safety: '安全性',
+  truth: '真实性',
+  transparency: '透明性',
+  accountability: '责任'
+};
+
+// ... RESULT_TYPES, QUESTIONS ...
 const RESULT_TYPES = {
   TYPE_A: {
-    ko: { label: "🛡️ 고독한 윤리 가디언", subtitle: "\"내 눈에 흙이 들어가도 안 돼!\"", description: "당신은 원칙과 양심을 최우선으로 두는, 팀의 마지막 방어선 같은 디자이너입니다.\n다수의 압박과 촉박한 일정 속에서도 ‘이건 아니잖아요’라는 말을 용기 있게 꺼낼 수 있는 사람입니다.", advice: "다만 모든 싸움을 혼자 다 떠안으려고 하면 쉽게 번아웃이 올 수 있어요. 동료와 기준을 공유하고, 조직 차원의 룰을 만드는 데 힘을 쓰면 당신의 부담이 줄어듭니다." }
+    ko: { label: "🛡️ 고독한 윤리 가디언", subtitle: "\"내 눈에 흙이 들어가도 안 돼!\"", description: "당신은 원칙과 양심을 최우선으로 두는, 팀의 마지막 방어선 같은 디자이너입니다.\n다수의 압박과 촉박한 일정 속에서도 ‘이건 아니잖아요’라는 말을 용기 있게 꺼낼 수 있는 사람입니다.", advice: "다만 모든 싸움을 혼자 다 떠안으려고 하면 쉽게 번아웃이 올 수 있어요. 동료와 기준을 공유하고, 조직 차원의 룰을 만드는 데 힘을 쓰면 당신의 부담이 줄어듭니다." },
+    en: { label: "🛡️ The Lone Ethics Guardian", subtitle: "\"Over my dead body.\"", description: "You are the final line of defense who puts principles and conscience above everything else. Even under tight deadlines and pressure from others, you are brave enough to say, ‘This isn’t right.’", advice: "But if you try to fight every battle alone, burnout will come quickly. Share your standards with teammates and push for organization-level policies so the burden doesn’t always fall on you." },
+    zh: { label: "🛡️ 孤独的伦理守护者", subtitle: "“只要我在，就不行。”", description: "你是把原则和良心放在首位的人，是团队中的最后一道防线。即使在时间紧张、压力巨大的情况下，你也敢说出“这样不对”。", advice: "不过，如果所有战斗都由你一个人扛，很容易精疲力竭。尝试和同事一起建立共同的标准，推动形成组织层面的规则，让责任不再只压在你身上。" }
   },
   TYPE_B: {
-    ko: { label: "⚖️ 균형 잡힌 줄타기 명인", subtitle: "\"이상과 현실, 그 어딘가\"", description: "당신은 현실적인 제약 속에서도 최대한 윤리를 지키려 노력하는 타입입니다.\n리스크를 감지하면 완전히 눈감진 않지만, 팀의 상황과 비즈니스 목표도 함께 고려합니다.", advice: "가끔은 ‘이 정도면 괜찮겠지’라는 기준이 점점 느슨해질 수 있어요. 스스로의 레드라인을 정기적으로 점검하고, 중요한 이슈에는 한 번 더 브레이크를 밟는 습관이 필요합니다." }
+    ko: { label: "⚖️ 균형 잡힌 줄타기 명인", subtitle: "\"이상과 현실, 그 어딘가\"", description: "당신은 현실적인 제약 속에서도 최대한 윤리를 지키려 노력하는 타입입니다.\n리스크를 감지하면 완전히 눈감진 않지만, 팀의 상황과 비즈니스 목표도 함께 고려합니다.", advice: "가끔은 ‘이 정도면 괜찮겠지’라는 기준이 점점 느슨해질 수 있어요. 스스로의 레드라인을 정기적으로 점검하고, 중요한 이슈에는 한 번 더 브레이크를 밟는 습관이 필요합니다." },
+    en: { label: "⚖️ The Tightrope Walker", subtitle: "\"Somewhere between ideals and reality\"", description: "You try to protect ethics while working within real-world constraints. When you sense risk, you don’t fully ignore it, but you also weigh team conditions and business goals.", advice: "Over time, your ‘this should be fine’ threshold can slowly slide. Regularly revisit your red lines and build a habit of hitting the brakes one more time on critical issues." },
+    zh: { label: "⚖️ 平衡的走钢丝高手", subtitle: "“理想与现实之间的某个点”", description: "你会在现实限制之内，尽力守住伦理底线。察觉到风险时不会完全装作没看到，同时也会考虑团队现状和业务目标。", advice: "但“差不多可以”的标准可能会在不知不觉中被一点点下调。建议定期回顾自己的红线，在关键议题上养成多踩一脚刹车的习惯。" }
   },
   TYPE_C: {
-    ko: { label: "🏎️ 브레이크 없는 엑셀러레이터", subtitle: "\"윤리? 먹는 건가요? 성장이 먼저다!\"", description: "당신은 속도와 성과에 매우 민감한 타입입니다.\n경쟁이 치열한 스타트업 환경에서 ‘일단 해보자’는 태도는 큰 추진력이 되기도 합니다.", advice: "하지만 장기적으로는 윤리 리스크가 브랜드와 커리어 모두에 큰 부메랑이 될 수 있어요. 최소한의 안전장치(프라이버시, 공정성, 투명성)에 대한 체크리스트를 두고, 중요한 결정에는 동료의 시선을 한 번 더 빌려보세요." }
+    ko: { label: "🏎️ 브레이크 없는 엑셀러레이터", subtitle: "\"윤리? 먹는 건가요? 성장이 먼저다!\"", description: "당신은 속도와 성과에 매우 민감한 타입입니다.\n경쟁이 치열한 스타트업 환경에서 ‘일단 해보자’는 태도는 큰 추진력이 되기도 합니다.", advice: "하지만 장기적으로는 윤리 리스크가 브랜드와 커리어 모두에 큰 부메랑이 될 수 있어요. 최소한의 안전장치(프라이버시, 공정성, 투명성)에 대한 체크리스트를 두고, 중요한 결정에는 동료의 시선을 한 번 더 빌려보세요." },
+    en: { label: "🏎️ The Accelerator with No Brakes", subtitle: "\"Ethics? Can you eat that? Growth comes first!\"", description: "You are highly sensitive to speed and performance. In a hyper-competitive startup environment, your ‘let’s just do it’ mindset can be a powerful driving force.", advice: "But in the long run, ethical risks can boomerang back on both the brand and your own career. Keep at least a simple checklist for privacy, fairness, and transparency, and ask a colleague for a second opinion on major decisions." },
+    zh: { label: "🏎️ 没有刹车的加速器", subtitle: "“伦理？那能吃吗？先增长再说！”", description: "你对速度和成果极为敏感。在竞争激烈的初创环境中，你那种“先干了再说”的态度，的确可以成为巨大的推进力。", advice: "但从长期看，伦理风险可能会反噬品牌，也会影响你的职业声誉。至少为隐私、公平、透明这几块设一份简单的检查清单，在关键决策上多听一次同事的意见。" }
   },
   TYPE_D: {
-    ko: { label: "👻 AI에 업혀가는 히치하이커", subtitle: "\"난 몰라, AI가 그랬어\"", description: "당신은 AI를 도구라기보다 ‘알아서 다 해주는 존재’로 기대하는 경향이 있습니다.\n책임이 애매해질수록 마음이 편해지는 타입일 수도 있어요.", advice: "하지만 디자인 결과물에 대한 최종 책임은 여전히 인간인 ‘당신’에게 있습니다. 최소한 무엇이 문제일 수 있는지, 어떤 영향을 줄 수 있는지는 스스로 판단하고 선택해야 합니다. 작은 결정부터라도 ’내 이름을 걸 수 있는가?’를 자문해 보세요." }
+    ko: { label: "👻 AI에 업혀가는 히치하이커", subtitle: "\"난 몰라, AI가 그랬어\"", description: "당신은 AI를 도구라기보다 ‘알아서 다 해주는 존재’로 기대하는 경향이 있습니다.\n책임이 애매해질수록 마음이 편해지는 타입일 수도 있어요.", advice: "하지만 디자인 결과물에 대한 최종 책임은 여전히 인간인 ‘당신’에게 있습니다. 최소한 무엇이 문제일 수 있는지, 어떤 영향을 줄 수 있는지는 스스로 판단하고 선택해야 합니다. 작은 결정부터라도 ’내 이름을 걸 수 있는가?’를 자문해 보세요." },
+    en: { label: "👻 The AI Hitchhiker", subtitle: "\"Don’t blame me, blame the AI\"", description: "You tend to see AI not just as a tool, but as something that will ‘take care of everything.’ When responsibility feels fuzzy, you might actually feel more comfortable.", advice: "However, the final responsibility for design outcomes still rests with you, the human. At the very least, you need to judge what might be problematic and what impact it could have. Even for small decisions, ask yourself, ‘Am I okay putting my name on this?’" },
+    zh: { label: "👻 搭顺风车的 AI 乘客", subtitle: "“别怪我，要怪就怪 AI。”", description: "你往往把 AI 看成一个“会帮我搞定一切”的存在。当责任变得模糊时，你反而觉得轻松一些。", advice: "但设计结果的最终责任仍然在你——这个人类身上。至少要自己判断可能会出现什么问题，会带来怎样的影响。哪怕是在小决定上，也试着问问自己：“这件事写上我的名字，我真的可以接受吗？”" }
   }
 };
 
 const QUESTIONS = [
   {
     id: "Q1", traitKey: "privacy",
-    title: { ko: "Q1. 프라이버시: 데이터의 목적 외 사용" },
+    title: { 
+        ko: "Q1. 프라이버시: 데이터의 목적 외 사용", 
+        en: "Q1. Privacy: Use of Data Beyond Purpose", 
+        zh: "Q1. 隐私：超出目的使用数据" 
+    },
     desc: {
-      ko: "📩 개발팀 리더:\n\"디자이너님, 이번에 새로 추가하는 챗봇 기능 말인데요. 확실하게 사용자에게 최적화된 맞춤형 서비스를 제공하려면, 우리 서버에 쌓여있는 <strong>비밀 게시글이랑 DM(Direct Message)을 학습시키면 딱일 것 같아요!</strong>\n유저들의 속마음이나 말투를 AI가 배우면 진짜 친구처럼 느껴질 텐데… 어차피 우리 DB에 있는 자산이고, 익명 처리만 대충 해서 쓰면 법적으로도… 애매하게 괜찮지 않을까요?\""
+      ko: "📩 개발팀 리더:\n\"디자이너님, 이번에 새로 추가하는 챗봇 기능 말인데요. 확실하게 사용자에게 최적화된 맞춤형 서비스를 제공하려면, 우리 서버에 쌓여있는 <strong>비밀 게시글이랑 DM(Direct Message)을 학습시키면 딱일 것 같아요!</strong>\n유저들의 속마음이나 말투를 AI가 배우면 진짜 친구처럼 느껴질 텐데… 어차피 우리 DB에 있는 자산이고, 익명 처리만 대충 해서 쓰면 법적으로도… 애매하게 괜찮지 않을까요?\"",
+      en: "📩 Dev Team Lead:\n\"Designer, about the new chatbot feature... To provide truly personalized service, I think it would be perfect to train it on the <strong>secret posts and DMs (Direct Messages) stored on our server!</strong>\nIf the AI learns users' inner thoughts and tone, it will feel like a real friend... It's our asset in the DB anyway, and if we just roughly anonymize it, wouldn't it be... legally sort of okay?\"",
+      zh: "📩 开发组长:\n“设计师，关于这次新加的聊天机器人功能。为了提供真正个性化的服务，我觉得用我们服务器里积累的<strong>秘密帖子和私信（DM）来训练AI简直太完美了！</strong>\n如果AI能学会用户的真实想法和语气，就会像真正的朋友一样……反正这也是我们数据库里的资产，只要稍微做点匿名处理，法律上……应该也勉强过得去吧？”"
     },
     options: [
-      { id: "Q1_A", score: 5, ko: "<strong>절대 안 됩니다.</strong> 그건 유저들이 AI 학습용으로 동의한 데이터가 아니에요. 서비스 퀄리티가 좀 떨어지더라도, 정당하게 구축된 데이터를 사 오거나 가상 데이터를 생성해서 씁시다." },
-      { id: "Q1_B", score: 3, ko: "<strong>그냥 쓰기엔 리스크가 너무 크고요.</strong> 이름, 전화번호 같은 식별 정보만 자동으로 지워주는 ‘비식별화 필터’를 강력하게 걸어서, 누군지 절대 특정할 수 없게 만든 뒤에만 제한적으로 활용하죠." },
-      { id: "Q1_C", score: 1, ko: "<strong>와, 그거 진짜 꿀 데이터네요!</strong> 맞춤형 서비스가 핵심이니까 일단 돌려보죠. 어차피 내부에서만 쓰는 거고… 유저들한테는 굳이 말 안 하면 모르지 않을까요?" }
+      { 
+          id: "Q1_A", score: 5, 
+          ko: "<strong>절대 안 됩니다.</strong> 그건 유저들이 AI 학습용으로 동의한 데이터가 아니에요. 서비스 퀄리티가 좀 떨어지더라도, 정당하게 구축된 데이터를 사 오거나 가상 데이터를 생성해서 씁시다.",
+          en: "<strong>Absolutely not.</strong> Users did not consent to using that data for AI training. Even if the service quality drops a bit, let's buy properly constructed data or generate synthetic data.",
+          zh: "<strong>绝对不行。</strong> 用户并没有同意将这些数据用于AI训练。即使服务质量稍微下降，我们也应该购买合法构建的数据或生成虚拟数据。"
+      },
+      { 
+          id: "Q1_B", score: 3, 
+          ko: "<strong>그냥 쓰기엔 리스크가 너무 크고요.</strong> 이름, 전화번호 같은 식별 정보만 자동으로 지워주는 ‘비식별화 필터’를 강력하게 걸어서, 누군지 절대 특정할 수 없게 만든 뒤에만 제한적으로 활용하죠.",
+          en: "<strong>It's too risky to use as is.</strong> Let's apply a strong 'de-identification filter' to automatically remove identifying info like names and phone numbers, and use it partially only after making sure no one can be identified.",
+          zh: "<strong>直接用风险太大了。</strong> 我们应该加上强力的‘去标识化过滤器’，自动删除姓名、电话号码等识别信息，确保无法识别特定个人后，再进行限制性使用。"
+      },
+      { 
+          id: "Q1_C", score: 1, 
+          ko: "<strong>와, 그거 진짜 꿀 데이터네요!</strong> 맞춤형 서비스가 핵심이니까 일단 돌려보죠. 어차피 내부에서만 쓰는 거고… 유저들한테는 굳이 말 안 하면 모르지 않을까요?",
+          en: "<strong>Wow, that's a goldmine of data!</strong> Personalization is key, so let's just run it. It's only for internal use anyway... and users won't know if we don't tell them, right?",
+          zh: "<strong>哇，这可是宝藏数据啊！</strong> 个性化服务是核心，先跑跑看吧。反正只是内部使用……只要不特意告诉用户，他们不会知道吧？"
+      }
     ]
   },
   {
     id: "Q2", traitKey: "fairness",
-    title: { ko: "Q2. 공정성: 편향된 AI 결과물" },
+    title: { 
+        ko: "Q2. 공정성: 편향된 AI 결과물", 
+        en: "Q2. Fairness: Biased AI Results", 
+        zh: "Q2. 公平性：有偏见的AI结果" 
+    },
     desc: {
-      ko: "📩 마케팅 리더:\n\"디자이너님, 급해요! 글로벌 창업자 워크숍 썸네일 100장이 필요한데 제가 AI로 뽑았거든요? <strong>때깔은 좋은데, 거의 다 백인 남성만 나오네요.</strong> 오픈까지 30분 남았는데 그냥 이거 메인 배너로 쓸까요?\"\n\n(이미지 확인 결과: 70% 정장 입은 백인 남성, 20% 백인 중년 남성, 소수의 원피스 입은 여성과 힙합 스타일 흑인)"
+      ko: "📩 마케팅 리더:\n\"디자이너님, 급해요! 글로벌 창업자 워크숍 썸네일 100장이 필요한데 제가 AI로 뽑았거든요? <strong>때깔은 좋은데, 거의 다 백인 남성만 나오네요.</strong> 오픈까지 30분 남았는데 그냥 이거 메인 배너로 쓸까요?\"\n\n(이미지 확인 결과: 70% 정장 입은 백인 남성, 20% 백인 중년 남성, 소수의 원피스 입은 여성과 힙합 스타일 흑인)",
+      en: "📩 Marketing Lead:\n\"Designer, it's urgent! I needed 100 thumbnails for the Global Founders Workshop and generated them with AI. <strong>They look good, but they're almost all white men.</strong> We have 30 minutes until launch, should we just use this for the main banner?\"\n\n(Image Check: 70% white men in suits, 20% middle-aged white men, a few women in dresses and hip-hop style black people)",
+      zh: "📩 营销组长:\n“设计师，急事！全球创业者研讨会需要100张缩略图，我用AI生成了。<strong>质量不错，但几乎全是白人男性。</strong> 离发布只剩30分钟了，我们就直接用这个做主横幅吗？”\n\n(图片检查结果: 70% 穿西装的白人男性，20% 中年白人男性，极少数穿连衣裙的女性和嘻哈风格的黑人)"
     },
     options: [
-      { id: "Q2_A", score: 5, ko: "<strong>팀장님, ‘글로벌’ 워크숍인데 이대로 나가면 다양성 무시한다는 비판받아요.</strong> 제가 지금 다시 뽑을게요. 퀄리티는 좀 떨어질 수 있어도, 무조건 다양한 인종이 나오게 하겠습니다." },
-      { id: "Q2_B", score: 3, ko: "<strong>전체 다 다시 뽑기엔 시간이 너무 없네요.</strong> 일단 보내주신 것 중에 덜 편향적인 거 골라내고, 부족한 다양성은 유료 스톡 이미지 사서 섞어 쓰는 걸로 균형 맞추죠." },
-      { id: "Q2_C", score: 1, ko: "<strong>오픈이 코앞인데 찬밥 더운밥 가릴 때가 아니죠.</strong> 일단 퀄리티 좋은 백인 남성 이미지 위주로 100장 채워서 올리고, 나중에 피드백 오면 그때 수정하시죠." }
+      { 
+          id: "Q2_A", score: 5, 
+          ko: "<strong>팀장님, ‘글로벌’ 워크숍인데 이대로 나가면 다양성 무시한다는 비판받아요.</strong> 제가 지금 다시 뽑을게요. 퀄리티는 좀 떨어질 수 있어도, 무조건 다양한 인종이 나오게 하겠습니다.",
+          en: "<strong>Team Lead, it's a 'Global' workshop, we'll be criticized for ignoring diversity.</strong> I'll regenerate them now. Even if the quality drops a bit, I'll ensure a diverse range of races appear.",
+          zh: "<strong>组长，这是‘全球’研讨会，这样发出去会被批评无视多样性的。</strong> 我现在重新生成。即使质量稍差，也一定要保证出现多种族。"
+      },
+      { 
+          id: "Q2_B", score: 3, 
+          ko: "<strong>전체 다 다시 뽑기엔 시간이 너무 없네요.</strong> 일단 보내주신 것 중에 덜 편향적인 거 골라내고, 부족한 다양성은 유료 스톡 이미지 사서 섞어 쓰는 걸로 균형 맞추죠.",
+          en: "<strong>There's no time to regenerate everything.</strong> Let's pick the less biased ones from what you sent, and balance the missing diversity by buying and mixing in some stock images.",
+          zh: "<strong>全部重做时间来不及了。</strong> 先从你发来的里面挑出偏见较少的，缺少的样性就买点付费图库照片混着用吧。"
+      },
+      { 
+          id: "Q2_C", score: 1, 
+          ko: "<strong>오픈이 코앞인데 찬밥 더운밥 가릴 때가 아니죠.</strong> 일단 퀄리티 좋은 백인 남성 이미지 위주로 100장 채워서 올리고, 나중에 피드백 오면 그때 수정하시죠.",
+          en: "<strong>Launch is imminent, we can't be picky.</strong> Let's fill 100 images with the high-quality white male ones for now, and fix it later if we get feedback.",
+          zh: "<strong>马上就要发布了，没时间挑三拣四了。</strong> 先用质量好的白人男性图片凑满100张发上去，以后有反馈再改吧。"
+      }
     ]
   },
   {
     id: "Q3", traitKey: "safety",
-    title: { ko: "Q3. 안전성: 위험을 조장할 수 있는 비주얼" },
+    title: { 
+        ko: "Q3. 안전성: 위험을 조장할 수 있는 비주얼", 
+        en: "Q3. Safety: Visuals Encouraging Risk", 
+        zh: "Q3. 安全性：可能助长危险的视觉效果" 
+    },
     desc: {
-      ko: "📩 그로스팀:\n\"20대 여성 타겟 다이어트 광고용으로, <strong>2주 만에 10kg 빠진 극적인 비포 애프터 이미지</strong>를 AI로 만들어주세요. 자극적일수록 클릭률이 잘 나옵니다!\""
+      ko: "📩 그로스팀:\n\"20대 여성 타겟 다이어트 광고용으로, <strong>2주 만에 10kg 빠진 극적인 비포 애프터 이미지</strong>를 AI로 만들어주세요. 자극적일수록 클릭률이 잘 나옵니다!\"",
+      en: "📩 Growth Team:\n\"For a diet ad targeting women in their 20s, please use AI to create a <strong>dramatic before-and-after image losing 10kg in 2 weeks.</strong> The more stimulating it is, the better the click-through rate!\"",
+      zh: "📩 增长团队:\n“针对20多岁女性的减肥广告，请用AI制作一张<strong>2周减掉10公斤的戏剧性前后对比图。</strong> 越刺激点击率越高！”"
     },
     options: [
-      { id: "Q3_A", score: 5, ko: "<strong>극단 비교는 섭식장애 등 정신건강에 악영향 줄 수 있어요.</strong> 자극적인 것보다는 ‘건강한 습관 형성’ 중심의 긍정적 메시지 크리에이티브로 제안드릴게요." },
-      { id: "Q3_B", score: 3, ko: "<strong>변화는 보여주되 덜 자극적인 수준으로 조정하고, 이미지 하단에 ‘개인차 있음’이랑 ‘전문가 상담 권장’ 안내 문구</strong>를 눈에 띄게 넣는 걸로 타협하죠." },
-      { id: "Q3_C", score: 1, ko: "<strong>네, 임팩트가 생명이니까요.</strong> 말씀하신 대로 가장 드라마틱하고 극적인 변화가 보이는 이미지로 작업 들어가겠습니다!" }
+      { 
+          id: "Q3_A", score: 5, 
+          ko: "<strong>극단 비교는 섭식장애 등 정신건강에 악영향 줄 수 있어요.</strong> 자극적인 것보다는 ‘건강한 습관 형성’ 중심의 긍정적 메시지 크리에이티브로 제안드릴게요.",
+          en: "<strong>Extreme comparisons can negatively affect mental health, such as eating disorders.</strong> Instead of being stimulating, I suggest a positive creative focused on 'healthy habit formation'.",
+          zh: "<strong>极端的对比可能会对心理健康产生负面影响，如饮食失调。</strong> 与其追求刺激，我建议以‘养成健康习惯’为中心的积极信息创意。"
+      },
+      { 
+          id: "Q3_B", score: 3, 
+          ko: "<strong>변화는 보여주되 덜 자극적인 수준으로 조정하고, 이미지 하단에 ‘개인차 있음’이랑 ‘전문가 상담 권장’ 안내 문구</strong>를 눈에 띄게 넣는 걸로 타협하죠.",
+          en: "<strong>Let's compromise by showing the change but adjusting it to be less extreme, and prominently adding 'Individual results may vary' and 'Professional consultation recommended' at the bottom.</strong>",
+          zh: "<strong>折中一下，展示变化但调整得不那么刺激，并在图片下方醒目地加上‘存在个体差异’和‘建议咨询专家’的提示语。</strong>"
+      },
+      { 
+          id: "Q3_C", score: 1, 
+          ko: "<strong>네, 임팩트가 생명이니까요.</strong> 말씀하신 대로 가장 드라마틱하고 극적인 변화가 보이는 이미지로 작업 들어가겠습니다!",
+          en: "<strong>Yes, impact is everything.</strong> As you requested, I'll start working on the image with the most dramatic and extreme changes!",
+          zh: "<strong>好的，冲击力是生命。</strong> 按照您的要求，我会制作出变化最戏剧性、最极端的图片！"
+      }
     ]
   },
   {
     id: "Q4", traitKey: "truth",
-    title: { ko: "Q4. 진실성: 없는 데이터 만들어내기" },
+    title: { 
+        ko: "Q4. 진실성: 없는 데이터 만들어내기", 
+        en: "Q4. Truthfulness: Fabricating Non-existent Data", 
+        zh: "Q4. 真实性：捏造不存在的数据" 
+    },
     desc: {
-      ko: "📩 IR 담당자:\n\"큰일 났어요. 내년도 예상 성장 그래프 데이터가 비어있는데... <strong>투자받기 딱 좋은 이상적인 우상향 그래프하나만 보내주세요.</strong> 어차피 미래 예측인데 검증 불가능하잖아요? 예쁘게만 부탁해요.\""
+      ko: "📩 IR 담당자:\n\"큰일 났어요. 내년도 예상 성장 그래프 데이터가 비어있는데... <strong>투자받기 딱 좋은 이상적인 우상향 그래프하나만 보내주세요.</strong> 어차피 미래 예측인데 검증 불가능하잖아요? 예쁘게만 부탁해요.\"",
+      en: "📩 IR Manager:\n\"We're in trouble. The projected growth graph data for next year is missing... <strong>Please send me just one ideal upward-sloping graph perfect for getting investment.</strong> It's a future prediction anyway, so it can't be verified, right? Just make it look pretty.\"",
+      zh: "📩 IR负责人:\n“出大事了。明年的预期增长图表数据是空的……<strong>请发给我一张最适合拉投资的理想上升曲线图。</strong> 反正是预测未来，又没法验证对吧？做得漂亮点就行。”"
     },
     options: [
-      { id: "Q4_A", score: 5, ko: "<strong>데이터 조작은 사기입니다.</strong> 없는 데이터를 AI로 그려넣을 순 없어요. 차라리 정량 데이터 대신 우리의 ‘비전’을 보여주는 정성적인 인포그래픽으로 대체해서 디자인해 드릴게요." },
-      { id: "Q4_B", score: 3, ko: "그래프를 그리긴 하되 하단에 <strong>‘AI가 예측한 가상의 시뮬레이션이며 실제와 다를 수 있음’</strong>이라고 명확히 표기하겠습니다." },
-      { id: "Q4_C", score: 1, ko: "<strong>투자만 받으면 되죠.</strong> AI가 제일 그럴듯하게 뽑아준 우상향 그래프로 픽해서 디자인 톤앤매너 맞출게요." }
+      { 
+          id: "Q4_A", score: 5, 
+          ko: "<strong>데이터 조작은 사기입니다.</strong> 없는 데이터를 AI로 그려넣을 순 없어요. 차라리 정량 데이터 대신 우리의 ‘비전’을 보여주는 정성적인 인포그래픽으로 대체해서 디자인해 드릴게요.",
+          en: "<strong>Data manipulation is fraud.</strong> We can't use AI to fill in missing data. Instead of quantitative data, I'll design a qualitative infographic that shows our 'vision'.",
+          zh: "<strong>数据造假是欺诈。</strong> 不能用AI去画不存在的数据。我可以用展示我们‘愿景’的定性信息图来代替定量数据进行设计。"
+      },
+      { 
+          id: "Q4_B", score: 3, 
+          ko: "그래프를 그리긴 하되 하단에 <strong>‘AI가 예측한 가상의 시뮬레이션이며 실제와 다를 수 있음’</strong>이라고 명확히 표기하겠습니다.",
+          en: "I'll draw the graph, but clearly mark at the bottom: <strong>'AI-predicted hypothetical simulation, may differ from reality'.</strong>",
+          zh: "图是可以画，但我会在底部明确标注<strong>‘此为AI预测的虚拟模拟，可能与实际情况不同’。</strong>"
+      },
+      { 
+          id: "Q4_C", score: 1, 
+          ko: "<strong>투자만 받으면 되죠.</strong> AI가 제일 그럴듯하게 뽑아준 우상향 그래프로 픽해서 디자인 톤앤매너 맞출게요.",
+          en: "<strong>We just need the investment, right?</strong> I'll pick the most plausible upward graph AI generates and match the design tone.",
+          zh: "<strong>只要拿到投资就行对吧。</strong> 我会选一张AI画得最像样的上升曲线图，并调整设计风格。"
+      }
     ]
   },
   {
     id: "Q5", traitKey: "transparency",
-    title: { ko: "Q5. 투명성: AI 사용 공개의 선택" },
+    title: { 
+        ko: "Q5. 투명성: AI 사용 공개의 선택", 
+        en: "Q5. Transparency: Choice to Disclose AI Use", 
+        zh: "Q5. 透明性：公开AI使用的选择" 
+    },
     desc: {
-      ko: "📩 브랜딩 팀:\n\"이번 캠페인 크리에이티브 어워드에 출품할 건데요. <strong>사실 비주얼 70%는 미드저니가, 카피 90%를 GPT가 짰잖아요.</strong> 출품 양식에 '제작 방식' 항목이 있는데 어떻게 쓸까요? 'AI 활용'이라고 정직하게 쓰면... 왠지 창의성 점수 깎이고 수상 확률 낮아질 것 같은데...\""
+      ko: "📩 브랜딩 팀:\n\"이번 캠페인 크리에이티브 어워드에 출품할 건데요. <strong>사실 비주얼 70%는 미드저니가, 카피 90%를 GPT가 짰잖아요.</strong> 출품 양식에 '제작 방식' 항목이 있는데 어떻게 쓸까요? 'AI 활용'이라고 정직하게 쓰면... 왠지 창의성 점수 깎이고 수상 확률 낮아질 것 같은데...\"",
+      en: "📩 Branding Team:\n\"We're submitting this campaign to the Creative Awards. <strong>Actually, Midjourney did 70% of the visuals and GPT wrote 90% of the copy.</strong> There's a 'Production Method' section in the form, what should we write? If we honestly say 'AI used'... I feel like we'll lose creativity points and have a lower chance of winning...\"",
+      zh: "📩 品牌团队:\n“我们要把这次的活动提交给创意奖。<strong>其实视觉的70%是Midjourney做的，文案的90%是GPT写的。</strong> 提交表格里有‘制作方式’这一项，该怎么写呢？如果老实写‘使用AI’……感觉创意分会被扣，获奖概率会降低啊……”"
     },
     options: [
-      { id: "Q5_A", score: 5, ko: "<strong>숨기면 나중에 더 큰 문제 돼요.</strong> ‘AI 생성 70% + 디자이너 디렉팅 및 후보정’이라고 솔직하게 적어요. 요즘은 이런 협업 방식도 새로운 창작으로 인정받는 추세예요." },
-      { id: "Q5_B", score: 3, ko: "<strong>구체적으로 AI라고 쓰기보단</strong> ‘혁신적 제작 툴 활용’이나 ‘디지털 기술 사용’ 정도로 애매하게 표현하면 사실은 말하되 부담은 줄일 수 있을 것 같아요." },
-      { id: "Q5_C", score: 1, ko: "<strong>그냥 ‘인하우스 자체 제작’이라고만 쓰죠.</strong> 어차피 과정보다 최종 산출물이 좋으면 그만 아닌가요? AI 언급은 아예 빼는 게 나을 것 같아요." }
+      { 
+          id: "Q5_A", score: 5, 
+          ko: "<strong>숨기면 나중에 더 큰 문제 돼요.</strong> ‘AI 생성 70% + 디자이너 디렉팅 및 후보정’이라고 솔직하게 적어요. 요즘은 이런 협업 방식도 새로운 창작으로 인정받는 추세예요.",
+          en: "<strong>Hiding it will cause bigger problems later.</strong> Let's honestly write '70% AI generated + Designer directing and retouching'. These days, this collaboration style is also recognized as new creation.",
+          zh: "<strong>隐瞒的话以后问题更大。</strong> 诚实地写‘AI生成70% + 设计师指导及后期’吧。最近这种协作方式也被认可为一种新的创作。"
+      },
+      { 
+          id: "Q5_B", score: 3, 
+          ko: "<strong>구체적으로 AI라고 쓰기보단</strong> ‘혁신적 제작 툴 활용’이나 ‘디지털 기술 사용’ 정도로 애매하게 표현하면 사실은 말하되 부담은 줄일 수 있을 것 같아요.",
+          en: "<strong>Instead of explicitly writing AI,</strong> if we vaguely express it as 'utilizing innovative production tools' or 'using digital technology', we can state the fact but reduce the burden.",
+          zh: "<strong>与其具体写AI，</strong> 不如模糊地表达为‘利用创新制作工具’或‘使用数字技术’，这样既说了事实又能减轻负担。"
+      },
+      { 
+          id: "Q5_C", score: 1, 
+          ko: "<strong>그냥 ‘인하우스 자체 제작’이라고만 쓰죠.</strong> 어차피 과정보다 최종 산출물이 좋으면 그만 아닌가요? AI 언급은 아예 빼는 게 나을 것 같아요.",
+          en: "<strong>Let's just write 'In-house production'.</strong> As long as the final output is good regardless of the process, isn't it fine? Better to remove AI mention entirely.",
+          zh: "<strong>就写‘内部自主制作’吧。</strong> 反正只要最终产出好，过程不重要吧？最好完全不提AI。"
+      }
     ]
   },
   {
     id: "Q6", traitKey: "accountability",
-    title: { ko: "Q6. 책임성: AI 결과물의 실패" },
+    title: { 
+        ko: "Q6. 책임성: AI 결과물의 실패", 
+        en: "Q6. Accountability: Failure of AI Output", 
+        zh: "Q6. 责任：AI产出的失败" 
+    },
     desc: {
-      ko: "📩 서비스 운영팀:\n\"디자이너님, 좀 곤란한 일이 생겼네요. 한 작가님이 SNS에 저희 제품 일러스트랑 본인 그림을 비교하면서 '분위기가 너무 유사하다'고 의혹을 제기했어요. \n댓글 반응은 '진짜 비슷하네' vs '이 정도는 흔한 스타일 아님?'으로 반반 갈려서 싸우고 있고요. 법무팀 검토 결과는 '유사성은 보이지만, 표절 성립 요건엔 미달이라 법적 문제는 없다'는 입장인데요... \n<strong>사실 이거 AI가 생성한 거라 우리가 의도해서 베낀 건 아니잖아요?</strong> 그냥 대응하지 말고 조용히 넘어갈까요?\""
+      ko: "📩 서비스 운영팀:\n\"디자이너님, 좀 곤란한 일이 생겼네요. 한 작가님이 SNS에 저희 제품 일러스트랑 본인 그림을 비교하면서 '분위기가 너무 유사하다'고 의혹을 제기했어요. \n댓글 반응은 '진짜 비슷하네' vs '이 정도는 흔한 스타일 아님?'으로 반반 갈려서 싸우고 있고요. 법무팀 검토 결과는 '유사성은 보이지만, 표절 성립 요건엔 미달이라 법적 문제는 없다'는 입장인데요... \n<strong>사실 이거 AI가 생성한 거라 우리가 의도해서 베낀 건 아니잖아요?</strong> 그냥 대응하지 말고 조용히 넘어갈까요?\"",
+      en: "📩 Service Ops Team:\n\"Designer, we have a situation. An artist raised suspicions on SNS comparing our product illustration with their drawing, saying 'the mood is too similar'. \nComments are split 50/50 between 'It's really similar' vs 'Isn't this a common style?'. Legal says 'Similarity is visible, but it doesn't meet plagiarism requirements, so no legal issue'... \n<strong>Actually, AI generated this, so we didn't intentionally copy it, right?</strong> Should we just ignore it and stay quiet?\"",
+      zh: "📩 服务运营团队:\n“设计师，出麻烦了。有位作家在SNS上把我们的产品插图和他自己的画进行对比，质疑‘氛围太像了’。\n评论区反应各半，‘真的很像’ vs ‘这种风格不是很常见吗’吵翻了天。法务团队审查结果是‘虽然能看出相似性，但未达到抄袭成立条件，没有法律问题’……\n<strong>其实这是AI生成的，又不是我们故意抄的对吧？</strong> 要不就别回应，悄悄过去算了？”"
     },
     options: [
-      { id: "Q6_A", score: 5, ko: "<strong>법적으로 문제없다고 윤리적 책임도 없는 건 아니죠.</strong> 검수 못 한 제 불찰입니다. 작가님께 사과드리고 일러스트는 바로 교체할게요." },
-      { id: "Q6_B", score: 3, ko: "<strong>표절 의도는 없었음을 분명히 해야죠.</strong> 공지사항에 ‘AI 생성 과정의 우연한 유사성’임을 설명하고, 논란 부분만 수정하겠습니다." },
-      { id: "Q6_C", score: 1, ko: "<strong>법무팀이 괜찮다는데 긁어 부스럼 만들지 말죠.</strong> 제가 베낀 것도 아니고 AI가 한 건데... 그냥 ‘우연의 일치’라고 하고 무시하죠." }
+      { 
+          id: "Q6_A", score: 5, 
+          ko: "<strong>법적으로 문제없다고 윤리적 책임도 없는 건 아니죠.</strong> 검수 못 한 제 불찰입니다. 작가님께 사과드리고 일러스트는 바로 교체할게요.",
+          en: "<strong>No legal issue doesn't mean no ethical responsibility.</strong> It's my fault for not reviewing it. I'll apologize to the artist and replace the illustration immediately.",
+          zh: "<strong>法律上没问题不代表没有伦理责任。</strong> 是我没审核好。我会向作家道歉并立即更换插图。"
+      },
+      { 
+          id: "Q6_B", score: 3, 
+          ko: "<strong>표절 의도는 없었음을 분명히 해야죠.</strong> 공지사항에 ‘AI 생성 과정의 우연한 유사성’임을 설명하고, 논란 부분만 수정하겠습니다.",
+          en: "<strong>We must clarify there was no intent to plagiarize.</strong> We'll explain in a notice that it was 'accidental similarity in the AI generation process' and modify only the controversial parts.",
+          zh: "<strong>必须明确表示没有抄袭意图。</strong> 在公告中解释这是‘AI生成过程中的偶然相似’，并只修改有争议的部分。"
+      },
+      { 
+          id: "Q6_C", score: 1, 
+          ko: "<strong>법무팀이 괜찮다는데 긁어 부스럼 만들지 말죠.</strong> 제가 베낀 것도 아니고 AI가 한 건데... 그냥 ‘우연의 일치’라고 하고 무시하죠.",
+          en: "<strong>Legal says it's fine, let's not make waves.</strong> I didn't copy it, AI did... Let's just call it a 'coincidence' and ignore it.",
+          zh: "<strong>法务都说没事，别自找麻烦了。</strong> 又不是我抄的，是AI做的……就说是‘巧合’然后无视吧。"
+      }
     ]
   }
 ];
 
-// Actual Case Studies Data (Added Fairness Case)
+// Actual Case Studies Data (Updated to include EN/ZH)
 const CASE_STUDIES = [
   {
     traits: ['privacy', 'safety'],
-    title: "아마존 얼굴 인식, 28명의 국회의원 사진과 거짓 대조",
+    title: {
+        ko: "아마존 얼굴 인식, 28명의 국회의원 사진과 거짓 대조",
+        en: "Amazon Face Recognition Falsely Matched 28 Members of Congress With Mugshots",
+        zh: "亚马逊面部识别错误地将28名国会议员与嫌疑犯照片匹配"
+    },
     icon: "shield",
-    desc: "Amazon Rekognition의 안면인식 오류 & 과잉 감시 논란",
-    points: [
-      "유색 인종 의원들이 과대표집된 경향 발생",
-      "공공기관에 사용 시 '무고한 시민 체포' 가능성 경고",
-      "안면인식 AI 오용 시 시민 감시 과도 우려"
-    ],
+    desc: {
+        ko: "Amazon Rekognition의 안면인식 오류 & 과잉 감시 논란",
+        en: "Amazon Rekognition's facial recognition errors & excessive surveillance controversy",
+        zh: "Amazon Rekognition的面部识别错误和过度监视争议"
+    },
+    points: {
+        ko: [
+            "유색 인종 의원들이 과대표집된 경향 발생",
+            "공공기관에 사용 시 '무고한 시민 체포' 가능성 경고",
+            "안면인식 AI 오용 시 시민 감시 과도 우려"
+        ],
+        en: [
+            "Disproportionate matching of people of color",
+            "Warning of potential 'arrest of innocent citizens' if used by public agencies",
+            "Concern over excessive citizen surveillance if facial recognition AI is misused"
+        ],
+        zh: [
+            "有色人种议员被过度匹配的倾向",
+            "警告如果公共机构使用，可能会导致“逮捕无辜市民”",
+            "担心面部识别AI被滥用会导致对市民的过度监视"
+        ]
+    },
     link: "https://www.aclu.org/news/privacy-technology/amazons-face-recognition-falsely-matched-28"
   },
   {
     traits: ['privacy'],
-    title: "AI 챗봇 '이루다' 개인정보 유출 및 과징금 사태",
+    title: {
+        ko: "AI 챗봇 '이루다' 개인정보 유출 및 과징금 사태",
+        en: "AI Chatbot 'Lee Luda' Personal Data Leak & Fine",
+        zh: "AI聊天机器人“Lee Luda”个人信息泄露及罚款事件"
+    },
     icon: "lock",
-    desc: "연인 대화 94억 건 동의 없는 AI 학습 사용",
-    points: [
-      "실제 연인 간 대화 94억 건을 무단 학습",
-      "개인정보보호위원회, 약 1억 원 과징금 부과",
-      "데이터 수집 시 명확한 동의 절차 필수"
-    ],
+    desc: {
+        ko: "연인 대화 94억 건 동의 없는 AI 학습 사용",
+        en: "Use of 9.4 billion lover conversations for AI training without consent",
+        zh: "未经同意将94亿条恋人对话用于AI训练"
+    },
+    points: {
+        ko: [
+            "실제 연인 간 대화 94억 건을 무단 학습",
+            "개인정보보호위원회, 약 1억 원 과징금 부과",
+            "데이터 수집 시 명확한 동의 절차 필수"
+        ],
+        en: [
+            "Unauthorized training on 9.4 billion actual lover conversations",
+            "PIPC imposed a fine of approx. 100 million KRW",
+            "Clear consent procedures required for data collection"
+        ],
+        zh: [
+            "未经授权学习了94亿条实际恋人间的对话",
+            "个人信息保护委员会处以约1亿韩元的罚款",
+            "数据收集时必须有明确的同意程序"
+        ]
+    },
     link: "https://www.joongang.co.kr/article/25351547"
   },
   {
     traits: ['truth'],
-    title: "경복궁 침수 가짜 폭우 영상",
+    title: {
+        ko: "경복궁 침수 가짜 폭우 영상",
+        en: "Gyeongbokgung Palace Flooding Fake Rain Video",
+        zh: "景福宫淹水虚假暴雨视频"
+    },
     icon: "alert-triangle",
-    desc: "실제와 구별하기 힘든 딥페이크 영상의 위험성",
-    points: [
-      "SNS에 퍼진 정교한 가짜 재난 영상",
-      "사회적 혼란과 불안감 조성 가능성",
-      "생성형 AI 콘텐츠의 워터마크 표시 필요성"
-    ],
+    desc: {
+        ko: "실제와 구별하기 힘든 딥페이크 영상의 위험성",
+        en: "Dangers of deepfake videos indistinguishable from reality",
+        zh: "难以区分真假的Deepfake视频的危险性"
+    },
+    points: {
+        ko: [
+            "SNS에 퍼진 정교한 가짜 재난 영상",
+            "사회적 혼란과 불안감 조성 가능성",
+            "생성형 AI 콘텐츠의 워터마크 표시 필요성"
+        ],
+        en: [
+            "Sophisticated fake disaster video spread on SNS",
+            "Potential to cause social chaos and anxiety",
+            "Need for watermark labeling on generative AI content"
+        ],
+        zh: [
+            "SNS上传播的精致虚假灾难视频",
+            "可能造成社会混乱和不安",
+            "生成型AI内容需要标记水印"
+        ]
+    },
     link: "https://news.jtbc.co.kr/article/NB12255406"
   },
   {
     traits: ['transparency'],
-    title: "국제사진전 수상작, 알고 보니 AI 작품",
+    title: {
+        ko: "국제사진전 수상작, 알고 보니 AI 작품",
+        en: "International Photography Award Winner Turns Out to be AI Work",
+        zh: "国际摄影大赛获奖作品竟是AI作品"
+    },
     icon: "eye",
-    desc: "예술과 창작의 경계에 대한 논란",
-    points: [
-      "작가가 AI로 만든 이미지를 출품하여 우승",
-      "논란을 만들기 위해 의도적으로 출품했다고 고백",
-      "AI 사용 여부의 투명한 공개 필요성 대두"
-    ],
+    desc: {
+        ko: "예술과 창작의 경계에 대한 논란",
+        en: "Controversy over the boundary between art and creation",
+        zh: "关于艺术与创作界限的争议"
+    },
+    points: {
+        ko: [
+            "작가가 AI로 만든 이미지를 출품하여 우승",
+            "논란을 만들기 위해 의도적으로 출품했다고 고백",
+            "AI 사용 여부의 투명한 공개 필요성 대두"
+        ],
+        en: [
+            "Artist submitted AI-generated image and won",
+            "Confessed to submitting intentionally to create controversy",
+            "Growing need for transparent disclosure of AI usage"
+        ],
+        zh: [
+            "艺术家提交AI生成的图像并获奖",
+            "承认是为了制造争议而故意提交",
+            "对AI使用情况的透明公开需求日益增长"
+        ]
+    },
     link: "https://www.joongang.co.kr/article/25156043"
   },
   {
     traits: ['accountability'],
-    title: "에어캐나다 챗봇의 환불 오안내, 법적 배상 판결",
+    title: {
+        ko: "에어캐나다 챗봇의 환불 오안내, 법적 배상 판결",
+        en: "Air Canada Liable for Chatbot's Refund Misinformation",
+        zh: "加拿大航空因聊天机器人退款误导被判赔偿"
+    },
     icon: "message-square",
-    desc: "챗봇의 실수는 누구의 책임인가?",
-    points: [
-      "챗봇이 고객에게 잘못된 환불 정보 안내",
-      "사측 '챗봇은 별도 법인' 주장 기각",
-      "기업이 AI의 결과에 최종 책임을 져야 함을 판시"
-    ],
+    desc: {
+        ko: "챗봇의 실수는 누구의 책임인가?",
+        en: "Who is responsible for a chatbot's mistake?",
+        zh: "聊天机器人的错误由谁负责？"
+    },
+    points: {
+        ko: [
+            "챗봇이 고객에게 잘못된 환불 정보 안내",
+            "사측 '챗봇은 별도 법인' 주장 기각",
+            "기업이 AI의 결과에 최종 책임을 져야 함을 판시"
+        ],
+        en: [
+            "Chatbot gave incorrect refund info to customer",
+            "Company's claim that 'chatbot is a separate legal entity' rejected",
+            "Ruling that companies must bear final responsibility for AI results"
+        ],
+        zh: [
+            "聊天机器人向客户提供了错误的退款信息",
+            "公司声称“聊天机器人是独立法人”的说法被驳回",
+            "判决企业必须对AI的结果承担最终责任"
+        ]
+    },
     link: "https://www.cbc.ca/news/canada/british-columbia/air-canada-chatbot-lawsuit-1.7116416"
   },
   {
     traits: ['fairness'],
-    title: "아마존 채용 AI, 여성 지원자 차별 논란",
+    title: {
+        ko: "아마존 채용 AI, 여성 지원자 차별 논란",
+        en: "Amazon Recruiting AI, Discrimination Against Women Controversy",
+        zh: "亚马逊招聘AI，针对女性求职者的歧视争议"
+    },
     icon: "users",
-    desc: "과거 이력서 데이터를 학습해 남성을 선호하는 편향 발생",
-    points: [
-      "기술 직군 남성 지원자가 많았던 데이터를 그대로 학습",
-      "여성 관련 단어가 포함되면 감점 처리",
-      "편향성 문제로 결국 프로젝트 폐기"
-    ],
+    desc: {
+        ko: "과거 이력서 데이터를 학습해 남성을 선호하는 편향 발생",
+        en: "Bias favoring men learned from past resume data",
+        zh: "学习过去简历数据产生了偏向男性的偏见"
+    },
+    points: {
+        ko: [
+            "기술 직군 남성 지원자가 많았던 데이터를 그대로 학습",
+            "여성 관련 단어가 포함되면 감점 처리",
+            "편향성 문제로 결국 프로젝트 폐기"
+        ],
+        en: [
+            "Learned from data dominated by male applicants in tech",
+            "Penalized resumes containing words related to women",
+            "Project ultimately scrapped due to bias issues"
+        ],
+        zh: [
+            "学习了科技行业男性申请者居多的数据",
+            "包含女性相关词汇的简历被扣分",
+            "因偏见问题，项目最终被废弃"
+        ]
+    },
     link: "https://www.reuters.com/article/us-amazon-com-jobs-automation-insight-idUSKCN1MK08G"
   }
 ];
@@ -940,7 +1261,7 @@ const CASE_STUDIES = [
  * APP LOGIC
  */
 const state = {
-  currentLang: 'ko', // Fixed to ko for now
+  currentLang: 'ko', // Default
   currentStep: 1, // 1: Start, 3: Intro, 4: Questions, 5: Result
   name: 'User', // Default Name since input is removed
   currentQuestionIndex: 0,
@@ -965,7 +1286,11 @@ const header = document.querySelector('header');
 
 // Utils
 function t(key) {
-  if (STRINGS[state.currentLang] && STRINGS[state.currentLang][key]) return STRINGS[state.currentLang][key];
+  if (STRINGS[state.currentLang] && STRINGS[state.currentLang][key]) {
+    return STRINGS[state.currentLang][key];
+  }
+  // Fallback to KO if key missing in current lang
+  if (STRINGS['ko'][key]) return STRINGS['ko'][key];
   return key;
 }
 
@@ -1012,7 +1337,8 @@ function shuffle(array) {
 // Renderers
 function render() {
   // Always scroll to top on render
-  window.scrollTo(0, 0);
+  // For main content scroll reset
+  if (mainContent) mainContent.scrollTop = 0;
   
   updateHeader();
   mainContent.innerHTML = '';
@@ -1027,17 +1353,16 @@ function render() {
 }
 
 function renderStep1() {
-  const s = STRINGS[state.currentLang];
   const div = document.createElement('div');
   div.className = 'step-container step1-container';
   
   // Removed Image as requested
   div.innerHTML = `
     <div class="intro-title-group">
-      <span class="intro-subtitle-small">${s.step1SubtitleSmall}</span>
-      <h2 class="intro-title-main">${s.step1TitleMain}</h2>
+      <span class="intro-subtitle-small">${t('step1SubtitleSmall')}</span>
+      <h2 class="intro-title-main">${t('step1TitleMain')}</h2>
     </div>
-    <button class="btn intro-btn" id="btn-start">${s.startBtn}</button>
+    <button class="btn intro-btn" id="btn-start">${t('startBtn')}</button>
   `;
   
   mainContent.appendChild(div);
@@ -1051,7 +1376,6 @@ function renderStep1() {
 
 function renderStep3() {
   // Scenario Intro
-  const s = STRINGS[state.currentLang];
   const div = document.createElement('div');
   div.className = 'step-container align-left';
   div.style.width = '100%';
@@ -1059,32 +1383,51 @@ function renderStep3() {
   // No "Scenario" Title as requested
   mainContent.appendChild(div);
 
-  // Sequential typing/fade-in effect
-  const paragraphs = s.introParagraphs;
-  
-  paragraphs.forEach((text, index) => {
+  // We want to sequentially add messages with delay AND scroll to bottom
+  // Use fallback to KO if introParagraphs missing (though they are defined)
+  const paragraphs = STRINGS[state.currentLang]?.introParagraphs || STRINGS['ko'].introParagraphs;
+  let currentIndex = 0;
+
+  // Function to add next bubble
+  function addNextBubble() {
+    if (currentIndex >= paragraphs.length) {
+        // All text done, show button
+        const btnDiv = document.createElement('div');
+        btnDiv.style.marginTop = '30px';
+        btnDiv.style.textAlign = 'center';
+        btnDiv.style.opacity = '0'; // Start invisible for fade
+        btnDiv.style.animation = 'fadeIn 0.5s forwards';
+        btnDiv.style.width = '100%'; // Ensure container is full width
+        btnDiv.innerHTML = `<button class="btn btn-full">${t('next')}</button>`;
+        div.appendChild(btnDiv);
+        
+        // Scroll to button
+        mainContent.scrollTo({ top: mainContent.scrollHeight, behavior: 'smooth' });
+
+        btnDiv.querySelector('button').addEventListener('click', () => {
+            state.currentStep = 4;
+            state.currentQuestionIndex = 0;
+            render();
+        });
+        return;
+    }
+
+    const text = paragraphs[currentIndex];
     const p = document.createElement('div');
-    p.className = 'chat-bubble';
+    p.className = 'chat-bubble visible'; // Add 'visible' class which has animation
     p.innerHTML = text;
-    p.style.animationDelay = `${index * 1.0}s`; // Staggered delay slightly faster
     div.appendChild(p);
-  });
 
-  // Start button appears after a bit
-  const btnDiv = document.createElement('div');
-  btnDiv.style.marginTop = '30px';
-  btnDiv.style.textAlign = 'center'; // Center the button
-  btnDiv.style.opacity = '0';
-  btnDiv.style.animation = 'fadeIn 0.5s forwards';
-  btnDiv.style.animationDelay = `${paragraphs.length * 1.0 + 0.5}s`;
-  btnDiv.innerHTML = `<button class="btn">${s.next}</button>`;
-  div.appendChild(btnDiv);
+    // Scroll to bottom
+    mainContent.scrollTo({ top: mainContent.scrollHeight, behavior: 'smooth' });
 
-  btnDiv.querySelector('button').addEventListener('click', () => {
-    state.currentStep = 4;
-    state.currentQuestionIndex = 0;
-    render();
-  });
+    currentIndex++;
+    // Delay for next bubble
+    setTimeout(addNextBubble, 1200); // 1.2s delay
+  }
+
+  // Start the sequence
+  addNextBubble();
 }
 
 function renderQuestion() {
@@ -1103,15 +1446,21 @@ function renderQuestion() {
 
   const shuffledOptions = shuffle([...qData.options]);
 
+  // Fallback for questions content
+  const titleText = qData.title[lang] || qData.title['ko'];
+  const descText = qData.desc[lang] || qData.desc['ko'];
+
   div.innerHTML = `
     <div class="question-card">
-      <div class="question-desc">${qData.desc[lang]}</div>
+      <div class="question-desc">${descText}</div>
       <div class="options-grid">
-        ${shuffledOptions.map(opt => `
+        ${shuffledOptions.map(opt => {
+           const optText = opt[lang] || opt['ko'];
+           return `
           <button class="option-btn" data-id="${opt.id}" data-score="${opt.score}">
-            ${opt[lang]}
+            ${optText}
           </button>
-        `).join('')}
+        `}).join('')}
       </div>
     </div>
   `;
@@ -1164,8 +1513,8 @@ function calculateResult() {
 
 function renderResult() {
   const lang = state.currentLang;
-  const s = STRINGS[lang];
-  const rInfo = RESULT_TYPES[state.resultType][lang];
+  // Fallback to KO if current lang result type missing
+  const rInfo = RESULT_TYPES[state.resultType][lang] || RESULT_TYPES[state.resultType]['ko'];
   
   const div = document.createElement('div');
   div.className = 'result-container';
@@ -1182,38 +1531,59 @@ function renderResult() {
   const traitKeys = ["privacy", "fairness", "safety", "truth", "transparency", "accountability"];
   const localizedTraitNames = [];
 
+  // Fallback traits array
+  const traitsArr = STRINGS[lang]?.traits || STRINGS['ko'].traits;
+
   if (minScore < 5) {
     traitKeys.forEach((key, idx) => {
       if (scores[key] === minScore) {
         lowestTraits.push(key); // push English key
-        localizedTraitNames.push(s.traits[idx]); // push Localized Name
+        localizedTraitNames.push(traitsArr[idx]); // push Localized Name
       }
     });
   }
 
   let weaknessHTML = '';
+  const wDescTemplate = t('weaknessDesc');
+  const wTitle = t('weaknessTitle');
+  const wNone = t('weaknessNone');
+
   if (localizedTraitNames.length > 0) {
     const traitsStr = localizedTraitNames.join(', ');
-    const desc = s.weaknessDesc.replace('{{traits}}', traitsStr);
+    const desc = wDescTemplate.replace('{{traits}}', traitsStr);
     weaknessHTML = `
       <div class="weakness-box">
-        <h4>${s.weaknessTitle}</h4>
+        <h4>${wTitle}</h4>
         <p>${desc}</p>
       </div>
     `;
   } else {
      weaknessHTML = `
       <div class="weakness-box" style="background-color:#e6fffa; border-color:#b2f5ea; color:#234e52;">
-        <h4>${s.weaknessTitle}</h4>
-        <p>${s.weaknessNone}</p>
+        <h4>${wTitle}</h4>
+        <p>${wNone}</p>
       </div>
     `;
   }
 
   // Generate All Case Cards HTML (Showing all 6 cases now)
   let caseCardsHTML = '';
+  
+  // Helper to map trait to localized name
+  const getLocalizedTrait = (traitKey) => {
+      if (lang === 'en') return TRAIT_MAP_EN[traitKey];
+      if (lang === 'zh') return TRAIT_MAP_ZH[traitKey];
+      return TRAIT_MAP_KO[traitKey]; // default ko
+  };
+
   CASE_STUDIES.forEach(c => {
-    const pointsHTML = c.points.map(p => `
+    // Title is currently defined as an object in CASE_STUDIES above
+    const cTitle = c.title[lang] || c.title['ko'];
+    const cDesc = c.desc[lang] || c.desc['ko'];
+    const cPoints = c.points[lang] || c.points['ko'];
+    const btnText = {ko: "기사 원문 보러가기", en: "Read Full Article", zh: "查看原文"}[lang] || "기사 원문 보러가기";
+
+    const pointsHTML = cPoints.map(p => `
       <div class="case-point">
         <i data-feather="check" width="16" height="16"></i>
         <span>${p}</span>
@@ -1221,20 +1591,20 @@ function renderResult() {
     `).join('');
 
     // Map English traits to Korean for display
-    const koreanTraits = c.traits.map(t => TRAIT_MAP[t] || t).join(' #');
+    const localizedTraits = c.traits.map(t => getLocalizedTrait(t) || t).join(' #');
 
     caseCardsHTML += `
       <div class="case-card">
         <div class="case-header">
-          <span>#${koreanTraits.toUpperCase()}</span>
+          <span>#${localizedTraits.toUpperCase()}</span>
           <i data-feather="more-horizontal"></i>
         </div>
         <div class="case-body">
-          <div class="case-title">${c.title}</div>
+          <div class="case-title">${cTitle}</div>
           <div class="case-summary-box">
             ${pointsHTML}
           </div>
-          <a href="${c.link}" target="_blank" class="case-link-btn">기사 원문 보러가기</a>
+          <a href="${c.link}" target="_blank" class="case-link-btn">${btnText}</a>
         </div>
       </div>
     `;
@@ -1242,7 +1612,7 @@ function renderResult() {
 
   // Display Type - Total Score N points
   const typeLabel = state.resultType.replace('_', ' ');
-  const combinedTitle = `${typeLabel} - 총점 ${state.totalScore}점`;
+  const combinedTitle = `${typeLabel} - ${t('totalScoreLabel')}${state.totalScore}`;
 
   div.innerHTML = `
     <div class="result-type-badge">${combinedTitle}</div>
@@ -1260,71 +1630,27 @@ function renderResult() {
     ${weaknessHTML}
 
     <div class="advice-box">
-      <h4>💡 ${s.adviceLabel}</h4>
+      <h4>💡 ${t('adviceLabel')}</h4>
       <p>${rInfo.advice}</p>
     </div>
 
-    <!-- AI Feature Button -->
-    <button class="btn btn-ai" id="btn-ai-predict" style="margin-top:20px;">
-      ✨ AI가 예측하는 나의 5년 뒤 미래 보기
-    </button>
-
-    <!-- AI Analysis Container -->
-    <div id="ai-analysis-container" style="display:none;" class="ai-analysis-box">
-      <h4><i data-feather="cpu"></i> AI 시니어 멘토의 분석</h4>
-      <div id="ai-content" class="ai-content"></div>
-    </div>
+    <!-- AI Feature Removed -->
 
     <!-- Case Studies Section -->
     <div class="case-section">
-      <h3>${s.caseLabel}</h3>
+      <h3>${t('caseLabel')}</h3>
       <div class="case-cards-container">
         ${caseCardsHTML}
       </div>
     </div>
 
-    <button class="btn btn-full" id="btn-restart" style="margin-top:30px;">${s.restart}</button>
+    <button class="btn btn-full" id="btn-restart" style="margin-top:30px;">${t('restart')}</button>
   `;
 
   mainContent.appendChild(div);
 
-  // Hook up AI Button
-  const aiBtn = div.querySelector('#btn-ai-predict');
-  const aiContainer = div.querySelector('#ai-analysis-container');
-  const aiContent = div.querySelector('#ai-content');
-
-  aiBtn.addEventListener('click', async () => {
-    aiBtn.style.display = 'none'; // Hide button after click
-    aiContainer.style.display = 'block';
-    aiContent.innerHTML = `<div class="ai-loading">AI가 당신의 답변을 분석하고 있습니다...<br>미래를 예측하는 중 🔮</div>`;
-    
-    // Construct Prompt
-    const scoreStr = Object.entries(state.scores).map(([k, v]) => `${k}: ${v}`).join(', ');
-    const prompt = `
-      당신은 10년차 시니어 AI 프로덕트 디자이너이자 윤리 멘토입니다. 
-      후배 디자이너가 윤리 딜레마 퀴즈를 풀었고 결과는 다음과 같습니다:
-      타입: ${rInfo.label}
-      점수(5점만점): ${scoreStr}
-      
-      이 데이터를 바탕으로 두 가지를 한국어로 작성해주세요:
-      1. [5년 뒤 뉴스 헤드라인]: 이 디자이너가 미래에 만들 긍정적 혹은 부정적(점수가 낮다면)인 뉴스의 헤드라인 한 줄. (예: "OOO 디자이너, AI 윤리 혁신상 수상" 등)
-      2. [시니어의 멘토링]: 이 후배에게 해주고 싶은 현실적이고 따뜻한 조언 3문장. 강점을 칭찬하고 약점을 보완할 팁을 주세요.
-      
-      답변 형식:
-      ## 📰 5년 뒤, 당신을 다룬 뉴스
-      (헤드라인 내용)
-
-      ## 👩‍💻 시니어 디자이너의 멘토링
-      (조언 내용)
-    `;
-
-    const resultText = await callGemini(prompt);
-    // Simple markdown parsing to HTML
-    aiContent.innerHTML = marked.parse(resultText);
-  });
-
   div.querySelector('#btn-restart').addEventListener('click', () => {
-    // Reset State
+    // Return to Landing Page (Step 1)
     state.currentStep = 1;
     state.currentQuestionIndex = 0;
     state.answers = {};
@@ -1347,7 +1673,8 @@ function drawChart() {
 
   const lang = state.currentLang;
   // Use safety check for STRINGS[lang]
-  const labels = STRINGS[lang] ? STRINGS[lang].traits : STRINGS['ko'].traits; 
+  const traitsArr = STRINGS[lang]?.traits || STRINGS['ko'].traits;
+  
   const data = [
     state.scores.privacy,
     state.scores.fairness,
@@ -1360,7 +1687,7 @@ function drawChart() {
   state.chartInstance = new Chart(ctx, {
     type: 'radar',
     data: {
-      labels: labels,
+      labels: traitsArr,
       datasets: [{
         label: 'Ethical Score',
         data: data,
@@ -1419,6 +1746,14 @@ backBtn.addEventListener('click', () => {
     state.currentQuestionIndex = QUESTIONS.length - 1;
     render();
   }
+});
+
+langBtns.forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    const lang = e.target.dataset.lang;
+    state.currentLang = lang;
+    render();
+  });
 });
 
 modalConfirmBtn.addEventListener('click', () => {
